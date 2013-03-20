@@ -6,7 +6,7 @@
     <property name="acs-oauth-secret-development" type="string">1yoZwPX9bWfOucE54QASiqXbvcwCDkde</property>
     <property name="acs-oauth-key-development" type="string">tdK1SCCcZ4Y1hkCFhdcwo4LPKfW0aDpm</property>
     <property name="acs-api-key-development" type="string">EFzOS8c28vncoCHuo7gfuMcaMjAJxMQo</property>
-    <id>net.ikmz.gakusyoku</id>
+    <id>com.cheekit.gakusyoku</id>
     <name>Gakusyoku</name>
     <version>1.0</version>
     <publisher>KOMATSU Issei</publisher>
