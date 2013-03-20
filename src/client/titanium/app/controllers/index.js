@@ -121,7 +121,7 @@ function setTableData(spotData){
 	});
 
     // countLabel変更
-    countLabel.text = checkinCount + " 0 / 6 スポット達成\n残り " + (6 - checkinCount) + " 箇所";
+    countLabel.text = checkinCount + " / 6 スポット達成\n残り " + (6 - checkinCount) + " 箇所";
 
     // Viewをセット
     headerView.add(headerLabel);
