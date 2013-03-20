@@ -100,7 +100,7 @@ function setTableData(spotData){
 		left : 10,
 		right : 10,
 		height : 'auto',
-		text : "巡礼地一覧",
+		text : "学食一覧",
 		font : {
 			fontSize : 18,
 			fontWeight : 'bold'
@@ -112,7 +112,7 @@ function setTableData(spotData){
 		bottom : 8,
 		right : 10,
 		height : 'auto',
-		text : "0 / 88 箇所巡礼済",
+		text : "0 / 6 箇所巡りました",
 		font : {
 			fontSize : 10,
 			fontWeight : 'bold'
@@ -121,7 +121,7 @@ function setTableData(spotData){
 	});
 
     // countLabel変更
-    countLabel.text = checkinCount + " 箇所巡礼済\n残り " + (88 - checkinCount) + " 箇所";
+    countLabel.text = checkinCount + " 0 / 6 スポット達成\n残り " + (6 - checkinCount) + " 箇所";
 
     // Viewをセット
     headerView.add(headerLabel);
