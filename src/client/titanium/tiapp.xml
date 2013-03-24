@@ -8,11 +8,11 @@
     <property name="acs-api-key-development" type="string">EFzOS8c28vncoCHuo7gfuMcaMjAJxMQo</property>
     <id>com.cheekit.gakusyoku</id>
     <name>Gakusyoku</name>
-    <version>1.0</version>
+    <version>1.0.0</version>
     <publisher>KOMATSU Issei</publisher>
     <url>http://cheekit.com</url>
     <description>東京六大学の食堂巡りを支援するアプリです</description>
-    <copyright>2013 by cheekit</copyright>
+    <copyright>2013 by Cheekit</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
