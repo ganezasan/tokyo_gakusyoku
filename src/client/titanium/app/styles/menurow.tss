@@ -9,7 +9,7 @@
   height: Ti.UI.SIZE
 },
 "#row": {
-	height:'30pt',
+	height:'60pt',
 	selectedBackgroundColor : "#FFF",
 	selectedColor: 'white',
 	backgroundGradient : {
