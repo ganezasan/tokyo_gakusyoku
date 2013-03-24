@@ -154,7 +154,7 @@ function scrollToOverheadView(){
         latitude: Alloy.Globals.app.overview_lat,
         longitude: Alloy.Globals.app.overview_lon,
         animate: true,
-        latitudeDelta: 4,
-        longitudeDelta: 4,
+        latitudeDelta: 0.25,
+        longitudeDelta: 0.25,
     });
 }

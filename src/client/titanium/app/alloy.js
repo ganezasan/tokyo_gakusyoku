@@ -16,5 +16,5 @@ Ti.include("app_config.js");
 // アプリケーション固定情報
 
 // Center
-Alloy.Globals.app.overview_lat = 38.591114;
-Alloy.Globals.app.overview_lon = 140.95459;
+Alloy.Globals.app.overview_lat = 35.689488;
+Alloy.Globals.app.overview_lon = 139.691706;

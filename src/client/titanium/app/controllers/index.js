@@ -56,6 +56,7 @@ function setTableData(spotData){
 
 	// 巡礼地一覧
 	var checkinCount = 0;
+	var spotCount = 0; // length は使わない
 	for ( var i in spotData) {
         var args = {
             title : spotData[i].title,
@@ -69,6 +70,7 @@ function setTableData(spotData){
         if(spotData[i].checkin){
             checkinCount++;
         }
+        spotCount++;
     }
 
 	// Header の設定
@@ -112,7 +114,7 @@ function setTableData(spotData){
 		bottom : 8,
 		right : 10,
 		height : 'auto',
-		text : "0 / 6 箇所巡りました",
+		text : "0 / " + spotCount + " 箇所巡りました",
 		font : {
 			fontSize : 10,
 			fontWeight : 'bold'
@@ -121,7 +123,7 @@ function setTableData(spotData){
 	});
 
     // countLabel変更
-    countLabel.text = checkinCount + " / 6 スポット達成\n残り " + (6 - checkinCount) + " 箇所";
+    countLabel.text = checkinCount + " / " + spotCount + " 箇所達成\n残り " + (spotCount - checkinCount) + " 箇所";
 
     // Viewをセット
     headerView.add(headerLabel);
