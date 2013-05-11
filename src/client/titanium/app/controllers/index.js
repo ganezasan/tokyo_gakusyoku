@@ -52,86 +52,57 @@ if (Ti.Platform.osname === 'iphone'){
  */
 function setTableData(spotData){
 	var tableData = [];
-	var section = Ti.UI.createTableViewSection();
+	// 巡礼達成数をトップのヘッダーに追加するため、0番目はあけておく
+	tableData[0] = "";
 
-	// 巡礼地一覧
-	var checkinCount = 0;
+	var sectionNo = 1;
+	var checkinCount = 0; 
 	var spotCount = 0; // length は使わない
-	for ( var i in spotData) {
-        var args = {
-            title : spotData[i].title,
-            latitude : spotData[i].latitude,
-            longitude : spotData[i].longitude,
-            checkin: spotData[i].checkin,
-        };
-        section.add(Alloy.createController('menurow', args).getView());
 
-        // チェックイン済みの巡礼地数を取得（TODO: もっとよい方法求む）
-        if(spotData[i].checkin){
-            checkinCount++;
-        }
-        spotCount++;
-    }
+	for ( i = 1; i < spotData.length; i++) {
+	  //sectionの設定
+	  var sectionName = spotData[i].group1;
+      var args1 = {
+      	title :sectionName
+	  }
+	  var section = Alloy.createController('menusection', args1).getView();
+
+	  // 巡礼地一覧
+	  for ( j = i; j < spotData.length; j++) {
+	    if(sectionName == spotData[j].group1){
+	      var args2 = {
+            title : spotData[j].title,
+            subTitle : spotData[j].group2,
+            latitude : spotData[j].latitude,
+            longitude : spotData[j].longitude,
+            checkin: spotData[j].checkin,
+		  };
+	      section.add(Alloy.createController('menurow', args2).getView());
+          // チェックイン済みの巡礼地数を取得（TODO: もっとよい方法求む）
+	      if(spotData[j].checkin){
+	         checkinCount++;
+	      }
+	      spotCount++;
+    	  i++;
+    	}else{
+	  	  //上記のループにてiが足されているた次のループ時のために-1する
+		  i--;
+      	  break;
+   		}
+  	  }
+	  tableData[sectionNo] = section;
+  	  sectionNo++;
+	}
 
 	// Header の設定
-	var headerView = Ti.UI.createView({
-		height : 'auto',
-		backgroundGradient : {
-			type : "linear",
-			startPoint : {
-				x : "0%",
-				y : "0%"
-			},
-			endPoint : {
-				x : "0%",
-				y : "100%"
-			},
-			colors : [{
-				color : "#EEE",
-				offset : 0.0
-			}, {
-				color : "#CCC",
-				offset : 1.0
-			}]
-		}
-	});
-
-	var headerLabel = Ti.UI.createLabel({
-		top : 8,
-		bottom : 8,
-		left : 10,
-		right : 10,
-		height : 'auto',
-		text : "学食一覧",
-		font : {
-			fontSize : 18,
-			fontWeight : 'bold'
-		},
-		color : '#666666'
-	});
-	var countLabel = Ti.UI.createLabel({
-		top : 8,
-		bottom : 8,
-		right : 10,
-		height : 'auto',
-		text : "0 / " + spotCount + " 箇所巡りました",
-		font : {
-			fontSize : 10,
-			fontWeight : 'bold'
-		},
-		color : '#666666'
-	});
-
-    // countLabel変更
-    countLabel.text = checkinCount + " / " + spotCount + " 箇所達成\n残り " + (spotCount - checkinCount) + " 箇所";
-
-    // Viewをセット
-    headerView.add(headerLabel);
-    headerView.add(countLabel);
-    section.headerView = headerView;
-
+	var args3 = {
+      	headerLabel :"学食一覧",
+      	headCountLabel :checkinCount + " / " + spotCount + " 箇所達成\n残り " + (spotCount - checkinCount) + " 箇所"
+	};
+	tableData[0] = Alloy.createController('menuheadsection', args3).getView();
+    
     // テーブルに追加
-	$.ds.tableView.data = [section];
+	$.ds.tableView.data = tableData;
 };
 
 /**
@@ -194,13 +165,14 @@ function loadSpot(){
     apiMapper.spotAllApi(
     	function(){
     		// 成功したとき
-            var spotData = {};
+            var spotData = [];
     		var json = eval('(' + this.responseText + ')');
     		for(i = 0; i < json.spots.length; i++){
     		    var tmpData = new Object();
-    			tmpData.prefecture = '青森県'; //現在固定値
     			tmpData.spot_id = json.spots[i].id;
     			tmpData.title = json.spots[i].name;
+    			tmpData.group1 = json.spots[i].group1; //大学名
+    			tmpData.group2 = json.spots[i].group2; //キャンパス名
     			tmpData.description = json.spots[i].description;
     			tmpData.latitude = json.spots[i].location.lat;
     			tmpData.longitude = json.spots[i].location.lon;
@@ -226,6 +198,8 @@ function loadSpot(){
                     } ,
                     function(e){
                         alert('データの取得に失敗しました。 [userMy]');
+                        alert(e);
+						alert(this.responseText);
                         Ti.API.info(this.responseText);
             		    // マスタデータのみ表示
                         mapView.setAnnotation(spotData);

@@ -6,6 +6,9 @@
 "#scrollView": {
 	layout:'vertical',
 },
+"#tableView":{
+    height: '80%',
+},
 "#description": {
     width: '90%',
     height: Ti.UI.SIZE,

@@ -1,0 +1,10 @@
+<Alloy>
+	<TableViewSection id="head">
+		<HeaderView>
+			<View id="headSection">
+	    		<Label id="headerLabel"/>
+	    		<Label id="headCountLabel"/>
+			</View>
+		</HeaderView>
+	</TableViewSection>
+</Alloy>

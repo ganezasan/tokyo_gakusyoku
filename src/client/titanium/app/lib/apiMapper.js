@@ -126,4 +126,22 @@ ApiMapper.prototype.userNotificationApi = function (token,social_type,social_tok
 		callback_failure);
 }
 
+ApiMapper.prototype.spotUpimageApi = function (callback_success, callback_failure,image_name,image){
+	return this.accessApi('POST',
+		 this.apiEndpoint + "/spot/up_image.json",
+		 {name:image_name,image:image},
+		 callback_success,
+		 callback_failure);
+}
+
+ApiMapper.prototype.spotImageApi = function (spot_id,callback_success, callback_failure){
+	return this.accessApi(
+		'GET',
+		// this.apiEndpoint + "/spot/get_image.json?spot_id=" + spot_id + "&user_id=" + user_id,
+		this.apiEndpoint + "/spot/get_image.json?spot_id=" + spot_id　+ "&user_id=",
+		{},
+		callback_success,
+		callback_failure);
+}
+
 exports.ApiMapper = ApiMapper;
