@@ -11,9 +11,10 @@ $.args =  args;
 // loadSpotImages($.args.spot_id,"1");
 
 // コントローラ呼び出し元からナビゲーションバーをセットする
-exports.setNavigation = function(nav, parent){
+exports.setNavigation = function(nav, parent,spotId){
     $.nav = nav;
     $.parent = parent;
+    loadSpotImages(spotId);
 };
 
 /**
@@ -21,7 +22,7 @@ exports.setNavigation = function(nav, parent){
  * @param void
  * @return void
  */
-exports.loadSpotImages = function(spotId){
+loadSpotImages = function(spotId){
     var apiMapper = new ApiMapper();
     apiMapper.spotImageApi(
     	spotId,

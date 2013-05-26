@@ -1,0 +1,11 @@
+var args = arguments[0] || {};　　// index.jsから引数を受け取る
+$.title.text = args.title;  // タイトル指定
+$.imageView.image = args.imageView; //イメージ（画像）指定
+$.row.titleLabel = args.title;
+$.row.param = args.param;
+$.row.controller = args.controller;
+$.row.navTitle = args.navTitle;
+$.row.touchEnabled = args.touchEnabled;
+$.row.selectionStyle = args.selectionStyle;
+$.row.hasChild = args.hasChild;
+$.row.imageView = args.imageView;

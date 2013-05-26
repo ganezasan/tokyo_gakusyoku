@@ -1,0 +1,47 @@
+"Label": {
+  color: "#666",
+  font: {
+    fontSize: "16"
+  }
+},
+"#row": {
+	height:'130pt',
+	zIndex: 2,
+},
+"#title": {
+	width:Ti.UI.SIZE,
+	top:"0dp",
+    left: "12dp",
+    height:"40dp",
+    font: {fontSize:"16dp" ,fontWeight:"normal"},
+},
+"#param": {
+	// height:Ti.UI.SIZE,
+    height:"40dp",
+	width:Ti.UI.SIZE,
+	top:"0dp",
+	right: "30dp",
+    color: "#2b552b",
+    font: {fontSize:"16dp",fontWeight:"bold"},
+},
+"#imageView": {
+	top:"35dp",
+    height:"85dp",
+    width:"85dp",
+},
+"#goButton":{
+	bottom:"10dp",
+	right:"30dp",
+	height:"30dp",
+	width:"60dp",
+    font: {fontSize:"10dp"},
+    zIndex: 1,
+    color:'#3B5998',
+	backgroundImage: 'none',
+	borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#c1c1c1',
+}
+
+
+

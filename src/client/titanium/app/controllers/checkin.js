@@ -1,31 +1,39 @@
-
 var ApiMapper = require("apiMapper").ApiMapper;
 var apiMapper = new ApiMapper();
 var xhrFileUpload = require("xhr_fileupload");
+var Common = require("common").Common;
+var common = new Common();
+
 /**
  * コントローラ起動時に渡される引数処理
  */
 var args = arguments[0] || {};
 $.args =  args;
+
 // 表示設定
 // $.title.text = args.title || '';
 // $.description.text = $.args.description || '';
 // $.tableView.data = table_views();
-table_views($.args);
+
+//テーブルデータをセット
+tableDataSet($.args.spot_id);
+
+//テーブルデータ
+// var tableData = [{image:'', rating_1:'', rating_2:'', rating_3:'',comment:''}];
+var checkinData = new Array(5);
+
+//picker
+createPicker();
+var slideIn =  Titanium.UI.createAnimation({bottom:0});
+var slideOut =  Titanium.UI.createAnimation({bottom:-251});
+var tmpRow;
 // $.image.image = args.imagePath;
 
 // 呼び出し元からナビゲーションバーをセットする
 exports.setNavigation = function(nav, parent){
     $.nav = nav;
     $.parent = parent;
-    //cameraボタン設置
-    var cameraButton = Ti.UI.createButton({title: 'Camera'});
-    cameraButton.addEventListener('click', function() {
-        sourceSelect.show();
-    });
-    $.checkin.rightNavButton = cameraButton;    
 };
-
 // Checkinの有効無効設定
 if( isUserLogined() &&
     isSpotNear($.args.currentPosition.latitude, $.args.currentPosition.longitude,
@@ -46,19 +54,19 @@ if( isUserLogined() &&
             // すでにチェックインしていたときはコメントを入力
             // $.comment.value = $.args.comment;
         }else{
-            //$.comment.value = "スポットに近づくとチェックインすることができます";
+   //         $.comment.value = "スポットに近づくとチェックインすることができます";
         }
     }else{
-//        $.comment.value = "チェックインをするにはログインする必要があります";
+     //   $.comment.value = "チェックインをするにはログインする必要があります";
         alert('チェックインするにはユーザ登録が必要です');
     }
 
-	//後で戻す
+	//あとで戻す
     // $.comment.touchEnabled = false;
     // $.comment.opacity = 0.70;
-    $.checkinButton.touchEnabled = false;
-    $.checkinButton.touchEnabled = false;
-    $.checkinButton.opacity = 0.70;
+    // $.checkinButton.touchEnabled = false;
+    // $.checkinButton.touchEnabled = false;
+    // $.checkinButton.opacity = 0.70;
 }
 
 /**
@@ -75,24 +83,73 @@ if( isUserLogined() &&
  * スポットにチェックインする
  */
 var checkinSpot = function checkinSpot(){
-	//新チェックイン画面表示処理に変更する
     var spot_id = $.args.spot_id;
-    // var comment = $.comment.value;
-
-    apiMapper.spotcheckinApi(Alloy.Globals.user.token, spot_id, comment,
+	var image = checkinData[0];
+	var rating_1 = checkinData[1];
+	var rating_2 = checkinData[2];
+	var rating_3 = checkinData[3];
+	var comment = checkinData[4];
+	
+	var ind=Titanium.UI.createProgressBar({
+		width:200,
+		height:50,
+		min:0,
+		max:1,
+		value:0,
+		style:Titanium.UI.iPhone.ProgressBarStyle.PLAIN,
+		font:{fontSize:11, fontWeight:'bold'},
+		color:'#888'
+	});
+	
+	var message = 'Uploading Image...';
+	var progressWindow = xhrFileUpload,
+		win2 = new progressWindow(ind,message);
+		win2.open();
+	
+	//他の操作不可とする
+	$.nav.setTouchEnabled(false);
+	$.checkin.opacity = 0.7;
+	
+    apiMapper.spotcheckinApi(
+    	// Alloy.Globals.user.token, 
+		"54046c7c4dee60ab931cfc2552c73e27fbcae505",
+    	spot_id, 
+    	comment,
+		rating_1,
+		rating_2,
+		rating_3,
+		image,
         function(e){
             //成功時
+			alert("チェックインしました。");
             Ti.API.info("Received text: " + this.responseText);
             Ti.API.info('Checkin completed');
+			//プログレスバー画面を閉じる
+			var t3 = Titanium.UI.create2DMatrix();
+			t3 = t3.scale(0);
+			win2.close({transform:t3,duration:300});	
 
+			//操作可能にする
+			$.nav.setTouchEnabled(true);
+			$.checkin.opacity = 1.0;
+
+            
             // Map画面に戻る
             $.nav.close($.parent);
-//            $.nav.group.close($.checkin.getView());
+	        $.nav.group.close($.checkin.getView());
         },
         function(e){
+			//操作可能にする
+			$.checkin.setTouchEnabled(true);
+			$.checkin.opacity = 1.0;
+
             //失敗時
             Ti.API.info("Received text: " + this.responseText);
             alert('チェックインに失敗しました : ' + e.data);
+        },
+        function(e){
+        	ind.value = e.progress;
+			Ti.API.info('ONSENDSTREAM - PROGRESS: ' + e.progress);
         }
     );
 };
@@ -138,13 +195,14 @@ function isUserLogined(){
     if(typeof Alloy.Globals.user.token === "undefined"){
         return false;
     }
+
     return true;
 }
 
 
 /*****カメラアップロード機能実装******/
 var sourceSelect = Titanium.UI.createOptionDialog({
-	options:['撮影する', 'アルバムから選ぶ', 'キャンセル','test','fileupload'],
+	options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
 	cancel:2,
 	title:'写真を添付'
 });
@@ -158,14 +216,6 @@ sourceSelect.addEventListener('click',function(e)
     case 1:
         selectFromPhotoGallery();
         break;
-    case 3:
-		var ExampleWindow = xhrFileUpload,
-			win2 = new ExampleWindow();
-			win2.open();
-		// self.containingTab.open(win2,{animated:true});
-	    break;
-    case 4:
-    	uploadImage();
     }
 });
 
@@ -174,9 +224,7 @@ function startCamera() {
         {
 	        success:function(event) {
 		        var image = event.media;
-                $.imageView.image = image;
-                $.imageView.show();
-                //消した uploadToTwitPic(image);
+		        setImage(image);
 		    },
 	        //cancel:function(){},
 	        error:function(error) {
@@ -196,7 +244,8 @@ function selectFromPhotoGallery() {
         {
             success: function(event) {
                 var image = event.media;
-                $.imageView.image = image;
+		        setImage(image);
+                // $.imageView.image = image;
                 //消した uploadToTwitPic(image);
              },
             // error:  function(error) { },
@@ -207,70 +256,59 @@ function selectFromPhotoGallery() {
     );
 }
 
-function uploadImage() {
-	Titanium.Media.openPhotoGallery({
-		success:function(event)
-		{
-			Ti.API.info("success! event: " + JSON.stringify(event));
-			var media = event.media;
-			var name = 'test.png'
-		    var dialog = Ti.UI.createAlertDialog({
-		        message: event,
-		        ok: 'OK',
-		        title: 'Metadata'
-		    }).show();
-		    
-			var xhr = Titanium.Network.createHTTPClient();
-		    var url = "http://54.248.225.182/api/spot/up_image.json";
-			xhr.open('POST', url);
-			var f1 = Titanium.Filesystem.getFile('twitterButton@2x.png');
-			var myimage=f1.read();
-			//通信する
-			// xhr.send({image:myimage,name:'twitterButton@2x.png'});	
-			xhr.send({image:event.media,name:name});	
+// function uploadImage() {
+	// Titanium.Media.openPhotoGallery({
+		// success:function(event)
+		// {
+			// Ti.API.info("success! event: " + JSON.stringify(event));
+			// var media = event.media;
+			// var name = 'test.png'
+		    // var dialog = Ti.UI.createAlertDialog({
+		        // message: event,
+		        // ok: 'OK',
+		        // title: 'Metadata'
+		    // }).show();
+// 		    
+			// var xhr = Titanium.Network.createHTTPClient();
+		    // var url = "http://54.248.225.182/api/spot/up_image.json";
+			// xhr.open('POST', url);
+			// var f1 = Titanium.Filesystem.getFile('twitterButton@2x.png');
+			// var myimage=f1.read();
+			// //通信する
+			// // xhr.send({image:myimage,name:'twitterButton@2x.png'});	
+			// xhr.send({image:event.media,name:name});	
+// 
+			// xhr.onerror = function(e)
+				// {
+					// Ti.UI.createAlertDialog({title:'Error', message:e.error}).show();
+					// Ti.API.info('IN ERROR ' + e.error);
+				// };
+			// xhr.onload = function(e)
+				// {
+					// // Ti.UI.createAlertDialog({title:'Success', message:'status code ' + this.status}).show();
+					// Ti.API.info('IN ONLOAD ' + this.status + ' readyState ' + this.readyState);
+		            // Ti.API.info("Received text: " + this.responseText);
+		   		// };
+			// xhr.onsendstream = function(e)
+				// {
+					// ind.value = e.progress ;
+					// Ti.API.info('ONSENDSTREAM - PROGRESS: ' + e.progress);
+				// };
+		// },
+		// cancel:function()
+			// {
+				// Ti.API.info('cancel');
+			// },
+		// error:function(error)
+			// {
+				// Ti.API.info('error');
+			// },
+		// allowEditing:false
+	// });
+// }
 
-			xhr.onerror = function(e)
-				{
-					Ti.UI.createAlertDialog({title:'Error', message:e.error}).show();
-					Ti.API.info('IN ERROR ' + e.error);
-				};
-			xhr.onload = function(e)
-				{
-					// Ti.UI.createAlertDialog({title:'Success', message:'status code ' + this.status}).show();
-					Ti.API.info('IN ONLOAD ' + this.status + ' readyState ' + this.readyState);
-		            Ti.API.info("Received text: " + this.responseText);
-		   		};
-			xhr.onsendstream = function(e)
-				{
-					ind.value = e.progress ;
-					Ti.API.info('ONSENDSTREAM - PROGRESS: ' + e.progress);
-				};
-		},
-		cancel:function()
-			{
-				Ti.API.info('cancel');
-			},
-		error:function(error)
-			{
-				Ti.API.info('error');
-			},
-		allowEditing:false
-	});
-}
-
-function table_views(_args) {
-	// create table view data object	
-	var setRowStyle = "Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE";
-
-	var tableData = [
-		{title:'大学名：' + $.args.title, hasChild:false,touchEnabled:false, selectionStyle:setRowStyle,header:'学食Info'},
-		{title:'キャンパス名：', hasChild:false,touchEnabled:false,selectionStyle:setRowStyle},
-		{title:'写真：', hasChild:true, navTitle:'写真一覧', controller:'spotImage'},
-		{title:'コメント：', hasChild:true, controller:''},
-		{title:'チェックイン数：', hasChild:true, controller:''},
-		{title:'リンク：', hasChild:true, controller:''}
-	];
-	
+function table_views(tableData) {
+	// create table view data object
 	//テーブルデータの追加
 	$.tableView.data = tableData;
 
@@ -280,14 +318,141 @@ function table_views(_args) {
 	
 	$.tableView.addEventListener('click', function(e)
 	{
-		if (e.rowData.controller)
+		if (e.rowData.controller == '')
 		{
+   			//評価
+   			$.pickerView.animate(slideIn);
+   			$.scrollView.setTouchEnabled(false);
+   			$.scrollView.opacity = 0.7;
+			tmpRow = e;
+   		}else if(e.rowData.controller == 'spotComment'){
+			//コメントビュー表示
+			tmpRow = e;
 	        var controller = Alloy.createController(e.rowData.controller, $.args);
 	        var view = controller.getView();
-            controller.setNavigation($.nav, view);
-            controller.loadSpotImages($.args.spot_id);
+            // controller.loadSpotImages($.args.spot_id);
+            var selectButton = Ti.UI.createButton({title: '決定'});
+        	//決定ボタン設置
+			selectButton.addEventListener('click', function() {
+			  	if(parseInt(common.jstrlen(controller.textArea.value)) > 1000){
+			  		alert("1000文字を超えています。");
+			  	}else{
+				    setComment(controller.textArea.value);
+				    $.nav.close(view);			  		
+			  	}
+			});
+            controller.setNavigation($.nav, view, $.args.spot_id,selectButton,e.row.comment);
             view.title = e.rowData.navTitle;
-            $.nav.open(view,{animated : true});
+	        $.nav.open(view,{animated : true});
+   		}else{
+   			tmpRow = e;
+   			//写真アップロード表示
+   			sourceSelect.show();
    		}
 	});
+}
+
+function tableDataSet(spotId) {
+	//デフォルト設定
+	var rowStyleNone = "Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE";
+	var rowStyleBlue = "Titanium.UI.iPhone.TableViewCellSelectionStyle.BLUE";
+	var tableData = [];
+	var rowData = [
+		{title:'写真を投稿する', hasChild:true, navTitle:'写真一覧', param:'',controller:'spotImage', touchEnabled:true, selectionStyle:rowStyleBlue},
+		{title:'料理', hasChild:true,navTitle:'', param:'--',controller:'',touchEnabled:true, selectionStyle:rowStyleBlue},
+		{title:'CP', hasChild:true,navTitle:'', param:'--', controller:'',touchEnabled:true, selectionStyle:rowStyleBlue},
+		{title:'雰囲気', hasChild:true,navTitle:'', param:'--', controller:'',touchEnabled:true, selectionStyle:rowStyleBlue},
+		{title:'コメント', hasChild:true, navTitle:'コメント',param:'',controller:'spotComment',touchEnabled:true, selectionStyle:rowStyleBlue}
+	];
+
+	var tableSection = $.tableSection;
+	tableSection.headerTitle = $.args.title;
+
+	//tableRow作成
+	for ( var i in rowData) {
+        var args = {
+            title:rowData[i].title,
+            hasChild : rowData[i].hasChild,
+            navTitle : rowData[i].navTitle,
+            controller: rowData[i].controller,
+            param: rowData[i].param,
+            // comment: rowData[i].comment,
+            touchEnabled: rowData[i].touchEnabled,
+            selectionStyle: rowData[i].selectionStyle,           
+        };
+        tableSection.add(Alloy.createController('checkinRow', args).getView());
+    }
+    tableData[0] = tableSection;
+	//テーブルを表示
+    table_views(tableData);
+}
+
+function createPicker(){
+	$.pic.selectionIndicator=true;
+	var maxrating = 40;
+	var minrating = 0.1;
+	var pickerValues = [];
+	for(i = 0; i <= maxrating;i++){
+		var rating = i/10+1;
+		pickerValues[i] = Ti.UI.createPickerRow({title:rating.toString(),custom_item:'b'});
+	}
+	$.pic.add(pickerValues);
+}
+
+$.pickerCancel.addEventListener('click',function() {
+	$.pickerView.animate(slideOut);
+	$.scrollView.setTouchEnabled(true);
+	$.scrollView.opacity = 1.0;
+});
+
+$.pickerDone.addEventListener('click',function(e) {
+    var args = {
+        title:tmpRow.row.titleLabel,
+        hasChild : tmpRow.row.hasChild,
+        navTitle : tmpRow.row.navTitle,
+        controller: tmpRow.row.controller,
+        param: $.pic.getSelectedRow(0).title,
+        touchEnabled: tmpRow.row.touchEnabled,
+        selectionStyle: tmpRow.row.selectionStyle,           
+    };
+	
+	var newrow = Alloy.createController('checkinRow', args).getView();
+	$.tableView.updateRow(tmpRow.index,newrow,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.LEFT});
+	$.pickerView.animate(slideOut);
+	$.scrollView.setTouchEnabled(true);
+	$.scrollView.opacity = 1.0;	
+	checkinData[tmpRow.index] = $.pic.getSelectedRow(0).title;
+	tmpRow = null;
+});
+
+setComment = function(comment){
+    var args = {
+        title:tmpRow.row.titleLabel,
+		comment:comment,
+        hasChild : tmpRow.row.hasChild,
+        navTitle : tmpRow.row.navTitle,
+        controller: tmpRow.row.controller,
+        touchEnabled: tmpRow.row.touchEnabled,
+        selectionStyle: tmpRow.row.selectionStyle,     
+    };
+	var newrow = Alloy.createController('checkinRow', args).getView();
+	$.tableView.updateRow(tmpRow.index,newrow,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.LEFT});
+	checkinData[tmpRow.index] = comment;
+	tmpRow = null;
+}
+
+setImage = function(image){
+    var args = {
+        title:tmpRow.row.titleLabel,
+		imageView:image,
+        hasChild : tmpRow.row.hasChild,
+        navTitle : tmpRow.row.navTitle,
+        controller: tmpRow.row.controller,
+        touchEnabled: tmpRow.row.touchEnabled,
+        selectionStyle: tmpRow.row.selectionStyle,     
+    };
+	var newrow = Alloy.createController('checkinImageRow', args).getView();
+	$.tableView.updateRow(tmpRow.index,newrow,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.LEFT});
+	checkinData[tmpRow.index] = image.imageAsResized(960, 960);
+	tmpRow = null;
 }

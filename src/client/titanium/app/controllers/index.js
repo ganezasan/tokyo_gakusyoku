@@ -176,6 +176,7 @@ function loadSpot(){
     			tmpData.description = json.spots[i].description;
     			tmpData.latitude = json.spots[i].location.lat;
     			tmpData.longitude = json.spots[i].location.lon;
+				tmpData.picture = json.spots[i].picture;
     			tmpData.checkin = false;     // checkinしたか
     			spotData[tmpData.spot_id] = tmpData;
     		}

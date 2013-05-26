@@ -48,6 +48,9 @@ exports.setAnnotation = function(spotData){
 			longitude: spotData[i].longitude,
 			title: spotData[i].title,
 			subtitle: checkin_comment,
+			group1:spotData[i].group1,
+			group2:spotData[i].group2,
+			picture: spotData[i].picture,
 			animate: true,
 			pincolor: (spotData[i].checkin) ? Titanium.Map.ANNOTATION_GREEN : Titanium.Map.ANNOTATION_RED, // チェックイン履歴によってピン色を変える
 			rightButton: Titanium.UI.iPhone.SystemButton.DISCLOSURE,
@@ -73,7 +76,9 @@ $.mymap.addEventListener('click', function(e){
     	var args = {
     	    spot_id: e.annotation.spot_id,
     		title : e.annotation.title,
-    		imagePath: e.annotation.imagePath,
+    		group1: e.annotation.group1,
+    		group2: e.annotation.group2,
+    		picture: e.annotation.picture,
     		description: e.annotation.mydescription,                         // description というプロパティは予約されているので使えないみたい
     		spotPosition: {latitude: e.annotation.latitude, longitude: e.annotation.longitude},
     		currentPosition: Alloy.Globals.currentPosition,                  // 現在地情報
@@ -81,7 +86,7 @@ $.mymap.addEventListener('click', function(e){
     		checkin: e.annotation.checkin,
     		checkin_time: e.annotation.checkin_time,
     	};
-        var controller = Alloy.createController('checkin', args);
+        var controller = Alloy.createController('spotInfo', args);
         var view = controller.getView();
 
         /**
@@ -89,7 +94,8 @@ $.mymap.addEventListener('click', function(e){
          */
         // var parentView =
         controller.setNavigation($.nav, view);
-        view.title = e.annotation.title;
+        // controller.tableDataSet(args.spot_id);
+        view.title = "学食Info";
         $.nav.open(view);
     }
 });
