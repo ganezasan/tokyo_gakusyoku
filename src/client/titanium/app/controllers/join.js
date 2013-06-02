@@ -12,6 +12,8 @@ exports.setNavigation = function(nav, parent){
  */
 $.args = arguments[0] || {};
 $.name.value = $.args.username;
+// $.args.fb_username = $.args.username;
+// $.args.tw_username = $.args.username;
 
 // 完了ボタンを追加（初回のみ）
 $.doneButton = Ti.UI.createButton({ systemButton: Ti.UI.iPhone.SystemButton.DONE });
@@ -22,10 +24,13 @@ $.doneButton.addEventListener('click', function(){
         $.args.social_type,
         $.args.social_token,
         $.args.social_secret,
+        $.args.fb_username,
+        $.args.tw_username,
         function(){
             // 成功したとき
             var json = eval('(' + this.responseText + ')');
-
+			alert(json);
+			
             // トークンが返却されたか確認
             if(typeof json.user.token == 'undefined'){
                 alert('登録に失敗しました。しばらくたってか再度お試し下さい');
@@ -50,6 +55,7 @@ $.doneButton.addEventListener('click', function(){
             // ハンドリングしたエラーレスポンスがあるとき
             Ti.API.info(this.responseText);
             var json = eval('(' + this.responseText + ')');
+			alert(json);
             switch(json.meta.code){
                 case '0001':
                 alert('すでにユーザ名が利用されています');

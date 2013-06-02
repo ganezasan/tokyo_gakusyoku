@@ -26,7 +26,6 @@ $.spotInfo.addEventListener('focus', function(){
 //テーブルを表示
 // tableDataSet($.args.spot_id);
 
-
 // 呼び出し元からナビゲーションバーをセットする
 exports.setNavigation = function(nav, parent){
     $.nav = nav;
@@ -147,12 +146,16 @@ function table_views(tableData) {
 	{
 		if (e.rowData.controller)
 		{
-	        var controller = Alloy.createController(e.rowData.controller, $.args);
-	        var view = controller.getView();
-            controller.setNavigation($.nav, view);
-            // controller.loadSpotImages($.args.spot_id);
-            view.title = e.rowData.navTitle;
-            $.nav.open(view,{animated : true});
+			if(Number(e.rowData.param) == 0){
+				alert("現在データがありません。");
+			}else{
+		        var controller = Alloy.createController(e.rowData.controller, $.args);
+		        var view = controller.getView();
+	            controller.setNavigation($.nav, view);
+	            // controller.loadSpotImages($.args.spot_id);
+	            view.title = e.rowData.navTitle;
+	            $.nav.open(view,{animated : true});
+   			}
    		}
 	});
 }
@@ -168,8 +171,8 @@ function tableDataSet(spotId) {
 		{title:'大学名：', param:$.args.group1, hasChild:false,navTitle:'',controller:'',touchEnabled:false,selectionStyle:rowStyleNone},
 		{title:'キャンパス名：', param:$.args.group2, hasChild:false,navTitle:'',controller:'',touchEnabled:false, selectionStyle:rowStyleNone},
 		{title:'写真数：', param:'', hasChild:true, navTitle:'写真一覧', controller:'spotImage',touchEnabled:true, selectionStyle:rowStyleBlue},
-		{title:'コメント数：', param:'', hasChild:true,navTitle:'', controller:'',touchEnabled:true, selectionStyle:rowStyleBlue},
-		{title:'チェックイン数：', param:'', hasChild:true, navTitle:'',controller:'',touchEnabled:true, selectionStyle:rowStyleBlue},
+		{title:'コメント数：', param:'', hasChild:true,navTitle:'コメント', controller:'spotInfoComment',touchEnabled:true, selectionStyle:rowStyleBlue},
+		{title:'チェックイン数：', param:'', hasChild:false, navTitle:'',controller:'',touchEnabled:false, selectionStyle:rowStyleNone},
 //		{title:'リンク：', param:'', hasChild:true, navTitle:'',controller:'',touchEnabled:true, selectionStyle:rowStyleBlue}
 	];
 	
@@ -214,8 +217,6 @@ function tableDataSet(spotId) {
 			tableData[4].param = json.spot.commentCount;
 			tableData[5].param = json.spot.checkinCount;
 
-			alert(json.spot);
-
 			var tableSection = $.tableSection;
 			for ( var i in tableData) {
 		        var args = {
@@ -240,7 +241,7 @@ function tableDataSet(spotId) {
 			
 			if(initFlag == 0){
 				table_views(rowData);
-				initFlag = 1;		
+				initFlag = 1;
 			}else{
 				updateTableView(rowData);	
 			}
@@ -260,7 +261,7 @@ function tableDataSet(spotId) {
 function updateTableView(tableData){
 	//テーブルデータの追加
 	var rows =tableData[0].getRows();
-	for( var i in rows){
+	for(var i in rows){
 		$.tableView.updateRow(i,rows[i],{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.FADE});
 	}
 }

@@ -102,11 +102,11 @@ ApiMapper.prototype.spotcheckinApi = function (token, spot_id, comment,rating_1,
 		callback_status);
 }
 
-ApiMapper.prototype.userregisterApi = function (name, social_type, social_token, social_secret, callback_success, callback_failure){
+ApiMapper.prototype.userregisterApi = function (name, social_type, social_token, social_secret, fb_username, tw_username, callback_success, callback_failure){
 	return this.accessApi(
 		'POST',
 		this.apiEndpoint + "/user/register.json",
-		{name : name, social_type : social_type, social_token : social_token,social_secret : Ti.Utils.md5HexDigest("cheekit" + social_secret)},
+		{name : name, social_type : social_type, social_token : social_token,social_secret : Ti.Utils.md5HexDigest("cheekit" + social_secret), fb_username : fb_username, tw_username : tw_username },
 		callback_success,
 		callback_failure,
 		'');
@@ -170,5 +170,15 @@ ApiMapper.prototype.spotAddGoSpotApi = function (token, spot_id,callback_success
 		 callback_failure,
 		 '');
  }
+ 
+ ApiMapper.prototype.spotCommentApi = function (spot_id,callback_success, callback_failure){
+	return this.accessApi(
+		'GET',
+		this.apiEndpoint + "/spot/get_comment.json?spot_id=" + spot_id,
+		{},
+		callback_success,
+		callback_failure,
+		'');
+}
 
 exports.ApiMapper = ApiMapper;

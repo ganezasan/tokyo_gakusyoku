@@ -35,6 +35,8 @@ var loginFacebook = function(e){
                     username: obj.username,
                     social_type: fbSocial_type,
                     picture: obj.picture.data.url,
+                    fb_username: obj.username,
+					tw_username: '',
                 };
             	var controller = Alloy.createController('join', args);
             	var view = controller.getView();
@@ -80,6 +82,8 @@ $.twitterButton.addEventListener('click', function(e) {
                     username: responseParams['screen_name'],
                     social_type: TwSocial_type,
                     picture: e['profile_image_url'],
+                    fb_username: '',
+                    tw_username: responseParams['screen_name'],
                 };
 
                 // TODO: 冗長なので綺麗にしたい
