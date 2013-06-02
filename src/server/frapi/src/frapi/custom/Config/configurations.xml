@@ -7,15 +7,15 @@
   </configuration>
   <configuration>
    <key>db_username</key>
-   <value>root</value>
+   <value>dbuser</value>
   </configuration>
   <configuration>
    <key>db_password</key>
-   <value>password</value>
+   <value>dbuser!dbuser</value>
   </configuration>
   <configuration>
    <key>db_database</key>
-   <value>example2</value>
+   <value>gakusyoku</value>
   </configuration>
   <configuration>
    <key>api_url</key>

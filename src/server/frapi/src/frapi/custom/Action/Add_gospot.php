@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Action All_spot 
+ * Action Add_gospot 
  * 
- * https://cheekit.atlassian.net/wiki/pages/viewpage.action?pageId=6062153
+ * Array
  * 
  * @link http://getfrapi.com
  * @author Frapi <frapi@getfrapi.com>
- * @link api/spot/all
+ * @link api/spot/add_gospot
  */
-class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
+class Action_Add_gospot extends Frapi_Action implements Frapi_Action_Interface
 {
 
     /**
@@ -17,7 +17,10 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      * 
      * @var An array of required parameters.
      */
-    protected $requiredParams = array();
+    protected $requiredParams = array(
+        'token',
+        'spot_id'
+        );
 
     /**
      * The data container to use in toArray()
@@ -36,6 +39,8 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function toArray()
     {
+        $this->data['token'] = $this->getParam('token', self::TYPE_OUTPUT);
+        $this->data['spot_id'] = $this->getParam('spot_id', self::TYPE_OUTPUT);
         return $this->data;
     }
 
@@ -48,6 +53,11 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executeAction()
     {
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
+        }
+        
         return $this->toArray();
     }
 
@@ -60,26 +70,12 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executeGet()
     {
-        $spotMaster = new SpotMaster();
-
-        $response = array();
-        foreach ($spotMaster->getAllSpots() as $spot){
-            $response[] = array(
-                "id"    => $spot->id,
-                "name"  => $spot->name,
-				"group1" => $spot->group1,
-				"group2" => $spot->group2,
-                "number"  => $spot->number,
-                "location" => array(
-                    "lat" => $spot->lat,
-                    "lon" => $spot->lon,
-                ),
-                "description" => $spot->description,
-        	"picture" => $spot->picture,
-	    );
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
         }
 
-        return array("spots" => $response, "meta" => array("status" => "true"));
+        return $this->toArray();
     }
 
     /**
@@ -91,6 +87,11 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executePost()
     {
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
+        }
+        
         return $this->toArray();
     }
 
@@ -103,7 +104,13 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executePut()
     {
-        return $this->toArray();
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
+        }
+	$user = UserFactory::generateByToken($this->getParam('token'));
+	GoSpotManager::insertGoSpot($user->id, $this->getParam('spot_id'));
+	return array("meta" => array("status" => "true"));	
     }
 
     /**
@@ -115,6 +122,11 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executeDelete()
     {
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
+        }
+        
         return $this->toArray();
     }
 
@@ -127,6 +139,11 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executeHead()
     {
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
+        }
+        
         return $this->toArray();
     }
 

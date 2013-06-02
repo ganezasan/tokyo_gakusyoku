@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Action All_spot 
+ * Action Spot_getcheckin 
  * 
- * https://cheekit.atlassian.net/wiki/pages/viewpage.action?pageId=6062153
+ * Array
  * 
  * @link http://getfrapi.com
  * @author Frapi <frapi@getfrapi.com>
- * @link api/spot/all
+ * @link api/spot/get_checkin
  */
-class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
+class Action_Spot_getcheckin extends Frapi_Action implements Frapi_Action_Interface
 {
 
     /**
@@ -17,7 +17,7 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      * 
      * @var An array of required parameters.
      */
-    protected $requiredParams = array();
+    protected $requiredParams = array('spot_id');
 
     /**
      * The data container to use in toArray()
@@ -36,6 +36,7 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function toArray()
     {
+        $this->data['spot_id'] = $this->getParam('spot_id', self::TYPE_OUTPUT);
         return $this->data;
     }
 
@@ -48,6 +49,11 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executeAction()
     {
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
+        }
+        
         return $this->toArray();
     }
 
@@ -60,27 +66,31 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executeGet()
     {
-        $spotMaster = new SpotMaster();
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
+        }
+        
+    	$checkinManager = new CheckinManager();
+        $spot_id = $this->getParam('spot_id');
+
+		$checkinData = $checkinManager->getCheckins($spot_id);
 
         $response = array();
-        foreach ($spotMaster->getAllSpots() as $spot){
+        foreach ($checkinData as $checkin){
             $response[] = array(
-                "id"    => $spot->id,
-                "name"  => $spot->name,
-				"group1" => $spot->group1,
-				"group2" => $spot->group2,
-                "number"  => $spot->number,
-                "location" => array(
-                    "lat" => $spot->lat,
-                    "lon" => $spot->lon,
-                ),
-                "description" => $spot->description,
-        	"picture" => $spot->picture,
-	    );
+                "id"    => $checkin->id,
+                "spot_id"  => $checkin->spot_id,
+                "user_name"  => $checkin->user_id,
+                "file_name" => $checkin->daizu_image_small,
+                "thumbnails" => $checkin->daizu_image_small,
+                "created_at" => $image->created_at,
+            );
         }
+        return array("spotImages" => $response, "meta" => array("status" => "true"));
 
-        return array("spots" => $response, "meta" => array("status" => "true"));
-    }
+		
+	}
 
     /**
      * Post Request Handler
@@ -91,6 +101,11 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executePost()
     {
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
+        }
+        
         return $this->toArray();
     }
 
@@ -103,6 +118,11 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executePut()
     {
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
+        }
+        
         return $this->toArray();
     }
 
@@ -115,6 +135,11 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executeDelete()
     {
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
+        }
+        
         return $this->toArray();
     }
 
@@ -127,6 +152,11 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executeHead()
     {
+        $valid = $this->hasRequiredParameters($this->requiredParams);
+        if ($valid instanceof Frapi_Error) {
+            throw $valid;
+        }
+        
         return $this->toArray();
     }
 

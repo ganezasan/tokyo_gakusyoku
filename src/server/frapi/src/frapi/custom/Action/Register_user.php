@@ -73,10 +73,14 @@ class Action_Register_user extends Frapi_Action implements Frapi_Action_Interfac
     public function executePost()
     {
         $param = $this->params;
+	
+	
 
         // SocialAccount を生成 - 2回目以降の登録のため
         $socialAccount = SocialAccountManager::generateBySocialToken(
-            $param["social_type"], $param["social_token"], $param["social_secret"]
+			$param["social_type"], 
+			$param["social_token"], 
+			$param["social_secret"]
         );
 
         try{
@@ -91,11 +95,16 @@ class Action_Register_user extends Frapi_Action implements Frapi_Action_Interfac
                 // SocialAccount の登録
                 $share = 1;     // 共有設定は 1 (ON) がデフォルト
                 $socialAccount = new SocialAccount(
-                    $user->id, $param["social_type"], $param["social_token"], $param["social_secret"], $share
-                );
+                    $user->id, 
+		    $param["social_type"],
+		    $param["social_token"], 
+		    $param["social_secret"], 
+		    $share,
+		    $param["fb_username"],
+		    $param["tw_username"]
+		);
                 $socialAccount->save();
             }
-
 
             // user_id から User を生成
             $user = UserFactory::generateByUserId($socialAccount->user_id);
@@ -112,9 +121,9 @@ class Action_Register_user extends Frapi_Action implements Frapi_Action_Interfac
             // 返却値生成
             $response = array(
                 "id"         => $user->id,
-                "token"      => $user->token,
-                "created_at" => $user->created_at,
-                "updated_at" => $user->updated_at,
+		"token"      => $user->token,
+		"created_at" => $user->created_at,
+		"updated_at" => $user->updated_at,
             );
 
             return array("user" => $response, "meta" => array("status" => "true"));

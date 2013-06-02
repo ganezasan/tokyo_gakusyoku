@@ -5,13 +5,17 @@ class SocialAccount extends OhenroBase {
     public $token;
     public $secret;
     public $share;
+	public $fb_username;
+	public $tw_username;
 
-    function __construct($user_id, $social_type, $token, $secret, $share, $created_at = null, $updated_at = null){
+    function __construct($user_id, $social_type, $token, $secret, $share,$fb_username,$tw_username, $created_at = null, $updated_at = null){
         $this->user_id = $user_id;
         $this->social_type = $social_type;
         $this->token = $token;
         $this->secret = $secret;
         $this->share = $share;
+		$this->fb_username = $fb_username;
+		$this->tw_username = $tw_username;
         $this->created_at = $created_at;
         $this->updated_at = $updated_at;
     }
@@ -32,6 +36,8 @@ INSERT INTO SocialAccounts
     , token
     , secret
     , share
+    , fb_username
+    , tw_username
     , created_at
 )
 VALUES
@@ -41,6 +47,8 @@ VALUES
     , :token
     , :secret
     , :share
+	, :fb_username
+	, :tw_username
     , now()
 )
 ON DUPLICATE KEY UPDATE
@@ -55,6 +63,8 @@ SQL;
         $sth->bindValue(':user_id', $this->user_id);
         $sth->bindValue(':social_type',$this->social_type);
         $sth->bindValue(':secret', $this->secret);
+	$sth->bindValue(':fb_username',$this->fb_username);
+	$sth->bindValue(':tw_username',$this->tw_username);
         $sth->bindValue(':secret2', $this->secret);
         $sth->bindValue(':token', $this->token);
         $sth->bindValue(':token2', $this->token);
