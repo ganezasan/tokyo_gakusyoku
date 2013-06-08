@@ -45,7 +45,9 @@ class Action_User_notification extends Frapi_Action implements Frapi_Action_Inte
         $this->data['social_token'] = $this->getParam('social_token', self::TYPE_OUTPUT);
         $this->data['social_secret'] = $this->getParam('social_secret', self::TYPE_OUTPUT);
         $this->data['post'] = $this->getParam('post', self::TYPE_OUTPUT);
-        return $this->data;
+        $this->data['fb_username'] = $this->getParam('fb_username', self::TYPE_OUTPUT);
+	$this->data['tw_username'] = $this->getParam('tw_username', self::TYPE_OUTPUT);
+	return $this->data;
     }
 
     /**
@@ -108,20 +110,26 @@ class Action_User_notification extends Frapi_Action implements Frapi_Action_Inte
         if($socialAccount){
             // すでに存在するときは設定を変更
             $socialAccount = $socialAccount[0];
-
-            $socialAccount->token = ($this->getParam('social_token') ?: $socialAccount->token);
+            var_dump($socialAccount);
+	    $socialAccount->id = $socialAccount->id;
+	    $socialAccount->token = ($this->getParam('social_token') ?: $socialAccount->token);
             $socialAccount->secret = ($this->getParam('social_secret') ?: $socialAccount->secret);
             $socialAccount->share = $this->getParam('post');
+	    $socialAccount->update();
         }else{
             // 存在しないときは新規作成
             $socialAccount = new SocialAccount(
-                $user->id, $this->getParam("social_type"), $this->getParam("social_token"),
-                $this->getParam("social_secret"), $this->getParam("post")
+        	null,
+	        $user->id, 
+		$this->getParam("social_type"), 
+		$this->getParam("social_token"),
+                $this->getParam("social_secret"), 
+		$this->getParam("post"),
+		$this->getParam("fb_username"),
+		$this->getParam("tw_username")
             );
-        }
-
-        // SocialAccount を保存
-        $socialAccount->save();
+	    $socialAccount->save();       
+ 	}
 
         return array("meta" => array("status" => "true"));
     }

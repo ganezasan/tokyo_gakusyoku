@@ -11,7 +11,7 @@ class SpotManager extends OhenroBase {
         }
 
         // Spot 作成
-        $spot = new Spot($r->id, $r->name, $r->group1, $r->group2,  $r->number, $r->lat, $r->lon, $r->description, $r->picture);
+        $spot = new Spot($r->id, $r->name, $r->group1, $r->group2,  $r->number, $r->lat, $r->lon, $r->description, $r->picture, $r->reference);
 
         return $spot;
     }

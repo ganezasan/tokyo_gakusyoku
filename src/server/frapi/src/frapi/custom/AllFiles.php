@@ -54,3 +54,4 @@ require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'GoSpot.class.php');
 require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'GoSpotManager.class.php');
 require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'Photo.class.php');
 require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'PhotoManager.class.php');
+require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'VersionManager.class.php');

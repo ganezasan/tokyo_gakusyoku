@@ -110,7 +110,7 @@ class Action_Spot_checkin extends Frapi_Action implements Frapi_Action_Interface
 	//$image = $this->getParam('image');
 
         $spot->checkin($user,$comment,$sa_id,$rating_1,$rating_2,$rating_3);
-        $checkin = CheckinManager::generateByCheckinId($spot->checkin_id);
+	$checkin = CheckinManager::generateByCheckinId($spot->checkin_id);
 	/*
         // シェア設定
         $message = sprintf("%s (%s にチェックインしました) #東京学食巡り", mb_strimwidth($comment, 0, 80, '...'), $spot->name);

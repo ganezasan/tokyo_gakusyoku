@@ -9,6 +9,7 @@ class Spot extends OhenroBase {
     public $lon;
     public $description;
     public $picture;
+    public $reference;
 
     // checkin
     public $checkin_id;
@@ -16,7 +17,7 @@ class Spot extends OhenroBase {
     public $checkin_comment;
     public $comment_flag;
 
-    public function __construct($spot_id, $name, $group1, $group2, $number, $lat, $lon, $description, $picture){
+    public function __construct($spot_id, $name, $group1, $group2, $number, $lat, $lon, $description, $picture,$reference){
         $this->spot_id = $spot_id;
         $this->name    = $name;
 	$this->group1  = $group1;
@@ -26,6 +27,7 @@ class Spot extends OhenroBase {
         $this->lon     = $lon;
         $this->description = $description;
 	$this->picture = $picture;
+	$this->reference = $reference;
     }
 
     public function checkin($user, $comment, $sa_id,$rating_1, $rating_2, $rating_3){

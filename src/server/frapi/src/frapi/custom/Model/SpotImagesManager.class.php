@@ -7,7 +7,16 @@ class SpotImagesManager extends OhenroBase {
 
     function getImages($spot_id){
 	$spotImagesTable = new Zend_Db_Table('Photos');
-	$select = $spotImagesTable->select()->where('spot_id = ?', $spot_id);
+	$select = $spotImagesTable->select()
+		->join(
+			array('c' => 'checkins'),
+			'checkin_id = c.id',
+			array(
+				'comment' => 'comment',
+			)
+		)
+		->where('spot_id = ?', $spot_id);
+		
 	return $spotImagesTable->fetchAll($select);
     }
     

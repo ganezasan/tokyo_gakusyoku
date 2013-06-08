@@ -74,8 +74,6 @@ class Action_Register_user extends Frapi_Action implements Frapi_Action_Interfac
     {
         $param = $this->params;
 	
-	
-
         // SocialAccount を生成 - 2回目以降の登録のため
         $socialAccount = SocialAccountManager::generateBySocialToken(
 			$param["social_type"], 
@@ -95,7 +93,8 @@ class Action_Register_user extends Frapi_Action implements Frapi_Action_Interfac
                 // SocialAccount の登録
                 $share = 1;     // 共有設定は 1 (ON) がデフォルト
                 $socialAccount = new SocialAccount(
-                    $user->id, 
+                    null,
+		    $user->id, 
 		    $param["social_type"],
 		    $param["social_token"], 
 		    $param["social_secret"], 

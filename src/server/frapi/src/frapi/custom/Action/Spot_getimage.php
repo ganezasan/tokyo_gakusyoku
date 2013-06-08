@@ -72,26 +72,26 @@ class Action_Spot_getimage extends Frapi_Action implements Frapi_Action_Interfac
             throw $valid;
         }
    
-	$photoManager = new PhotoManager();
-	$spot_id = $this->getParam('spot_id');
-	$spotData;
-	error_log($spot_id, 3, '/var/tmp/app.log');
-	if(empty($spot_id)){
-		$spotData = $photoManager->getAllImages(); 
-	}else{
-		$spotData = $photoManager->getImages($spot_id);
-	}
+		$photoManager = new PhotoManager();
+		$spot_id = $this->getParam('spot_id');
+		$spotData;
+		if(empty($spot_id)){
+				$spotData = $photoManager->getAllImages(); 
+		}else{
+				$spotData = $photoManager->getImages($spot_id);
+		}
 
 
         $response = array();
         foreach ($spotData as $image){
-			$response[] = array(
-                "id"    => $image->id,
-                "spot_id"  => $image->spot_id,
-                "user_id"  => $image->user_id,
-                "file_name" => $image->daizu_image_small,
-                "thumbnails" => $image->daizu_image_large,
-                "created_at" => $image->created_at,
+		$response[] = array(
+		"id"    => $image["id"],
+                "spot_id"  => $image["spot_id"],
+                "user_id"  => $image["user_id"],
+                "file_name" => $image["daizu_image_small"],
+                "thumbnails" => $image["daizu_image_large"],
+                "comment" => $image["comment"],
+		"created_at" => $image["created_at"],
             );
         }
 		return array("spotImages" => $response, "meta" => array("status" => "true"));    
