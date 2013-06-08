@@ -29,8 +29,7 @@ $.doneButton.addEventListener('click', function(){
         function(){
             // 成功したとき
             var json = eval('(' + this.responseText + ')');
-			alert(json);
-			
+			alert("登録に成功しました");
             // トークンが返却されたか確認
             if(typeof json.user.token == 'undefined'){
                 alert('登録に失敗しました。しばらくたってか再度お試し下さい');

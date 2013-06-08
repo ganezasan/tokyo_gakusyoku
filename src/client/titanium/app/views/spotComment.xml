@@ -5,7 +5,7 @@
             <TableViewSection id="tableSection">
     			<HeaderView>
 					<View id="headSection" height="30">
-			    		<Label id="headerLabel">(1000文字まで)</Label>
+			    		<Label id="headerLabel">(140文字まで)</Label>
 			    		<Label id="headCountLabel">0</Label>
 			    		<Label id="headCountLabelPoint">文字</Label>
 					</View>

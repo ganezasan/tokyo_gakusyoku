@@ -36,7 +36,7 @@ $.switch_twitter.addEventListener('change', function(e){
         //initialization
         var twitterApi = new TwitterApi({
             consumerKey: Alloy.Globals.app.twitter_consumer_token,
-            consumerSecret:Alloy. Globals.app.twitter_consumer_secret,
+            consumerSecret:Alloy.Globals.app.twitter_consumer_secret,
         });
 
         // いったん初期化
@@ -49,7 +49,15 @@ $.switch_twitter.addEventListener('change', function(e){
     	    twitterApi.account_verify_credentials({
     	        onSuccess: function(e){
                     // 更新
-                    updateSocialSetting(e.source, 1, responseParams['oauth_token'], responseParams['oauth_token_secret'], 1);
+                    updateSocialSetting(
+                    	e.source, 
+                    	1, 
+                    	responseParams['oauth_token'], 
+                    	responseParams['oauth_token_secret'], 
+                    	1,
+                    	null,
+                    	responseParams['screen_name']
+                    );
                 },
     	        onError: function(){
     	            alert('認証に失敗しました');
@@ -62,50 +70,42 @@ $.switch_twitter.addEventListener('change', function(e){
         twitterApi.init();
     }else{
         // OFF のときは更新
-        updateSocialSetting(e.source.value, 1, null, null, 0);
+        updateSocialSetting(
+        	e.source.value, 
+        	1, 
+        	Alloy.Globals.app.twitter_consumer_token, 
+        	Alloy.Globals.app.twitter_consumer_secret, 
+        	0,
+        	null, 
+        	null);
     }
 });
 
 // Facebookボタン
 $.switch_facebook.addEventListener('change', function(e){
+    if(Ti.Facebook.loggedIn){
+        Ti.Facebook.logout();
+    }    
     if(e.source.value){
         // ON のときは認証して更新
         Ti.Facebook.authorize();
     }else{
         // OFF のときは更新
-        updateSocialSetting(e.source.value, 2, null, null, 0);
+        access_token = Ti.Facebook.getAccessToken(),
+        updateSocialSetting(
+        	e.source.value,
+        	2,
+        	access_token, 
+        	null, 
+        	0,
+        	null,
+        	null
+    	);
 
-        // FIXME: updateSocialSetting で失敗したときにおかしくなる。（ボタンがOFFなのにサーバはONのまま）
-        if(Ti.Facebook.loggedIn){
-            Ti.Facebook.logout();
-        }
+        // // FIXME: updateSocialSetting で失敗したときにおかしくなる。（ボタンがOFFなのにサーバはONのまま）
+
     }
 });
-
-
-/**
- * ソーシャル設定更新
- * @param  social_type  1: Twitter, 2: Facebook
- * @param  share        1: ON, 0, OFF
- * @return void
- */
-function updateSocialSetting(switch_button, social_type, token, secret, share){
-    apiMapper.userNotificationApi(
-        Alloy.Globals.user.token,
-        social_type,
-        token,
-        secret,
-        share,
-        function(e){
-            $.switch_button.value = share;
-        },
-        function(e){
-            alert('更新に失敗しました。[notification]');
-            $.switch_button.value = !share;  // 元に戻す
-        }
-    );
-}
-
 
 function loginFacebook(e){
     if(e.error){
@@ -113,12 +113,62 @@ function loginFacebook(e){
         $.switch_facebook.value = false;
         return;
     }else if(e.canceled){
+    	alert(e.error);
         $.switch_facebook.value = false;
         return;
     }
+    // アクセストークン取得
+    access_token = Ti.Facebook.getAccessToken(),
+    Ti.Facebook.requestWithGraphPath(
+        'me?fields=username,picture',
+        {access_token: access_token},
+        "GET",
+        function(e) {
+            if (e.success) {
+                var obj = JSON.parse(e.result);
+				// 更新
+			    updateSocialSetting(
+			    	e.source, 
+			    	2, 
+			    	access_token, 
+			    	null, 
+			    	1,
+			    	obj.username,
+		    		''
+	    		);
+            }
+        },
+        function(){
+        	alert("登録に失敗しました");
+        }
+    );
+}
 
-    // 更新
-    updateSocialSetting(e.source, 2, Ti.Facebook.getAccessToken(), null, 1);
+/**
+ * ソーシャル設定更新
+ * @param  social_type  1: Twitter, 2: Facebook
+ * @param  share        1: ON, 0, OFF
+ * @return void
+ */
+function updateSocialSetting(switch_button, social_type, token, secret, share, fb_username, tw_username){
+    apiMapper.userNotificationApi(
+        Alloy.Globals.user.token,
+        social_type,
+        token,
+        secret,
+        share,
+        fb_username,
+        tw_username,
+        function(e){
+			alert("更新しました");
+            $.switch_button.value = share;
+        },
+        function(e){
+        	alert(this.responseText);
+            alert('更新に失敗しました。[notification]');
+            $.switch_button.value = !share;  // 元に戻す
+        }
+    );
 }
 
 Ti.Facebook.addEventListener('login', loginFacebook);

@@ -51,6 +51,7 @@ exports.setAnnotation = function(spotData){
 			group1:spotData[i].group1,
 			group2:spotData[i].group2,
 			picture: spotData[i].picture,
+			reference: spotData[i].reference,
 			animate: true,
 			pincolor: (spotData[i].checkin) ? Titanium.Map.ANNOTATION_GREEN : Titanium.Map.ANNOTATION_RED, // チェックイン履歴によってピン色を変える
 			rightButton: Titanium.UI.iPhone.SystemButton.DISCLOSURE,
@@ -79,6 +80,7 @@ $.mymap.addEventListener('click', function(e){
     		group1: e.annotation.group1,
     		group2: e.annotation.group2,
     		picture: e.annotation.picture,
+    		reference: e.annotation.reference,
     		description: e.annotation.mydescription,                         // description というプロパティは予約されているので使えないみたい
     		spotPosition: {latitude: e.annotation.latitude, longitude: e.annotation.longitude},
     		currentPosition: Alloy.Globals.currentPosition,                  // 現在地情報

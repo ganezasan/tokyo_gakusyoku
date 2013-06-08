@@ -1,4 +1,4 @@
-function xhr_upload(ind,message) {
+function createIndicator(ind,message,height,width,top) {
 	var t = Titanium.UI.create2DMatrix();
 	t = t.scale(0);
 
@@ -7,15 +7,15 @@ function xhr_upload(ind,message) {
 		backgroundColor:'#3B5998',
 		borderWidth:1,
 		borderColor:'#c1c1c1',
-		height:250,
-		width:300,
+		height:height,
+		width:width,
 		borderRadius:10,
-		opacity:0.92,
+		opacity:0.75,
 		transform:t
 	});
 	
 	var indicator = Ti.UI.createActivityIndicator({
-		top: 50,
+		top: top,
 		height: 100,
 		width: 'auto',
 		style: Ti.UI.iPhone.ActivityIndicatorStyle.BIG,
@@ -54,4 +54,4 @@ function xhr_upload(ind,message) {
 	return win;
 };
 
-module.exports = xhr_upload;
+module.exports = createIndicator;

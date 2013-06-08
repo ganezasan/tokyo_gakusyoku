@@ -2,9 +2,10 @@
 　　<TableViewRow id="row">
 		<Label id="title">title</Label>
 		<Label id="param">param</Label>
-		<ImageView id="imageView"/>
 		<View>
+			<ImageView id="imageView"/>
 			<Button id="goButton" title="行きたい!" onClick="goSpot"/>
 		<View>
+		<Label id="reference">reference</Label>
 	</TableViewRow>
 </Alloy>

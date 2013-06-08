@@ -106,7 +106,7 @@ ApiMapper.prototype.userregisterApi = function (name, social_type, social_token,
 	return this.accessApi(
 		'POST',
 		this.apiEndpoint + "/user/register.json",
-		{name : name, social_type : social_type, social_token : social_token,social_secret : Ti.Utils.md5HexDigest("cheekit" + social_secret), fb_username : fb_username, tw_username : tw_username },
+		{name : name, social_type : social_type, social_token : social_token,social_secret : Ti.Utils.md5HexDigest("cheekit" + social_secret), fb_username : fb_username, tw_username : tw_username},
 		callback_success,
 		callback_failure,
 		'');
@@ -122,11 +122,11 @@ ApiMapper.prototype.usermyApi = function (token, callback_success, callback_fail
 		'');
 }
 
-ApiMapper.prototype.userNotificationApi = function (token,social_type,social_token,social_secret,post, callback_success, callback_failure){
+ApiMapper.prototype.userNotificationApi = function (token,social_type,social_token,social_secret,post,fb_username, tw_username, callback_success, callback_failure){
 	return this.accessApi(
 		'POST',
 		this.apiEndpoint + "/user/notification.json",
-		{token : token,social_type : social_type,social_token : social_token,social_secret : social_secret,post : post},
+		{token : token,social_type : social_type,social_token : social_token,social_secret : social_secret,post : post, fb_username:fb_username, tw_username: tw_username},
 		callback_success,
 		callback_failure,
 		'');
@@ -175,6 +175,16 @@ ApiMapper.prototype.spotAddGoSpotApi = function (token, spot_id,callback_success
 	return this.accessApi(
 		'GET',
 		this.apiEndpoint + "/spot/get_comment.json?spot_id=" + spot_id,
+		{},
+		callback_success,
+		callback_failure,
+		'');
+}
+
+ApiMapper.prototype.checkVersionApi = function (version_id,callback_success, callback_failure){
+	return this.accessApi(
+		'GET',
+		this.apiEndpoint + "/version/check.json?version_id=" + version_id,
 		{},
 		callback_success,
 		callback_failure,

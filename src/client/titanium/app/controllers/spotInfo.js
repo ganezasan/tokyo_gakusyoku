@@ -1,7 +1,7 @@
 
 var ApiMapper = require("apiMapper").ApiMapper;
 var apiMapper = new ApiMapper();
-var xhrFileUpload = require("xhr_fileupload");
+var createIndicator = require("createIndicator");
 var imageUrl = "http://gakusyoku.nas.iginga.com/images/spotImages/";
 var Common = require("common").Common;
 var common = new Common();
@@ -183,9 +183,9 @@ function tableDataSet(spotId) {
 		token ='';
 	}
 	
-	var message = 'loding...';
-	var progressWindow = xhrFileUpload,
-		win2 = new progressWindow('',message);
+	var message = ' Loading...';
+	var progressWindow = createIndicator,
+		win2 = new progressWindow('',message,100,180,'auto');
 		win2.open();
 	
     var apiMapper = new ApiMapper();
@@ -210,14 +210,16 @@ function tableDataSet(spotId) {
 			}
 			if(Number(json.spot.commentCount) <= 0){
 				tableData[5].touchEnabled = false;
-				tableData[5].selectionStyle = rowStyleNone;				
+				tableData[5].selectionStyle = rowStyleNone;	
 			}
 				
 			tableData[3].param = json.spot.imageCount;
 			tableData[4].param = json.spot.commentCount;
 			tableData[5].param = json.spot.checkinCount;
-
-			var tableSection = $.tableSection;
+			tableData[5].right = '50dp'; //汚いがしょうがない
+			
+			tableSection = Titanium.UI.createTableViewSection();
+			// var tableSection = $.tableSection;
 			for ( var i in tableData) {
 		        var args = {
 		            title:tableData[i].title,
@@ -226,10 +228,13 @@ function tableDataSet(spotId) {
 		            controller: tableData[i].controller,
 		            param: tableData[i].param,
 		            touchEnabled: tableData[i].touchEnabled,
-		            selectionStyle: tableData[i].selectionStyle,           
+		            selectionStyle: tableData[i].selectionStyle,
+		            right:tableData[i].right, 
 		        };
 		        if(Number(i) == 0){
-		        	args.picture = imageUrl + $.args.picture;
+		        	// args.picture = imageUrl + $.args.picture;
+					args.picture = $.args.picture;
+					args.reference = $.args.reference;
 		        	args.spot_id = $.args.spot_id;
 		        	args.gospotCount = json.spot.gospotCount;
 			        tableSection.add(Alloy.createController('spotInfoImageRow', args).getView());   	

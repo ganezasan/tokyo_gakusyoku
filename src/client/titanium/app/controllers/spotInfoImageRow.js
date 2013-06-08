@@ -7,6 +7,7 @@ $.args =  args;
 $.title.text = args.title;  // タイトル指定
 $.imageView.image = args.picture; //イメージ（画像）指定
 $.param.text = args.param;  // パラメータ指定
+$.reference.text =  '出典：' + args.reference; //出典指定
 $.row.titleLabel = args.title;
 $.row.param = args.param;
 $.row.controller = args.controller;
@@ -15,6 +16,7 @@ $.row.touchEnabled = args.touchEnabled;
 $.row.selectionStyle = args.selectionStyle;
 $.row.hasChild = args.hasChild;
 $.row.imageView = args.imageView;
+$.row.reference = args.reference;
 
 //初期処理
 init();
@@ -22,8 +24,17 @@ init();
 function init(){
 	if(Number(args.gospotCount) != 0){
 		changeButtonStyle();
-	}	
+	}
+	if(!args.picture){
+		$.imageView.image = '/noimage@2x.png';
+	}
 }
+
+$.imageView.addEventListener('click', function(e){
+	if($.args.reference){
+		Titanium.Platform.openURL($.args.reference);		
+	}
+});
 
 var goSpot = function goSpot() {
 	//ログインチェック

@@ -20,8 +20,8 @@ $.spotComment.addEventListener("open", function(event, type) {
 
 $.textArea.addEventListener('change',function(e){
   $.headCountLabel.text = common.jstrlen($.textArea.value);
-  if(parseInt($.headCountLabel.text) > 1000){
-  	alert("1000文字を超えています。");
+  if(parseInt($.headCountLabel.text) > 140){
+  	alert("140文字を超えています。");
   }
 });
 

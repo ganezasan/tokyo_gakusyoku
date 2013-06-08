@@ -1,6 +1,6 @@
 var ApiMapper = require("apiMapper").ApiMapper;
 var apiMapper = new ApiMapper();
-var xhrFileUpload = require("xhr_fileupload");
+var createIndicator = require("createIndicator");
 var Common = require("common").Common;
 var common = new Common();
 
@@ -102,8 +102,8 @@ var checkinSpot = function checkinSpot(){
 	});
 	
 	var message = 'Uploading Image...';
-	var progressWindow = xhrFileUpload,
-		win2 = new progressWindow(ind,message);
+	var progressWindow = createIndicator,
+		win2 = new progressWindow(ind,message,150,250,0);
 		win2.open();
 	
 	//他の操作不可とする
@@ -111,8 +111,7 @@ var checkinSpot = function checkinSpot(){
 	$.checkin.opacity = 0.7;
 	
     apiMapper.spotcheckinApi(
-    	// Alloy.Globals.user.token, 
-		"54046c7c4dee60ab931cfc2552c73e27fbcae505",
+    	Alloy.Globals.user.token,
     	spot_id, 
     	comment,
 		rating_1,
@@ -139,6 +138,11 @@ var checkinSpot = function checkinSpot(){
 	        $.nav.group.close($.checkin.getView());
         },
         function(e){
+			//プログレスバー画面を閉じる
+			var t3 = Titanium.UI.create2DMatrix();
+			t3 = t3.scale(0);
+			win2.close({transform:t3,duration:300});	
+
 			//操作可能にする
 			$.checkin.setTouchEnabled(true);
 			$.checkin.opacity = 1.0;

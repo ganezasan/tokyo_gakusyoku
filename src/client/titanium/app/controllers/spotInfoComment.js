@@ -1,6 +1,6 @@
 var ApiMapper = require("apiMapper").ApiMapper;
 var apiMapper = new ApiMapper();
-var xhrFileUpload = require("xhr_fileupload");
+var createIndicator = require("createIndicator");
 
 /**
  * コントローラ起動時に渡される引数処理
@@ -21,9 +21,9 @@ function tableDataSet(spotId) {
 	var rowStyleNone = "Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE";
 	var rowData =[];
 	
-	var message = 'loding...';
-	var progressWindow = xhrFileUpload,
-		win2 = new progressWindow('',message);
+	var message = ' Loading...';
+	var progressWindow = createIndicator,
+		win2 = new progressWindow('',message,100,180,'auto');
 		win2.open();
 		
     var apiMapper = new ApiMapper();

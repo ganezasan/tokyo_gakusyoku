@@ -5,8 +5,8 @@
   }
 },
 "#row": {
-	height:'130pt',
-	zIndex: 2,
+	height:'140pt',
+	zIndex: 3,
 },
 "#title": {
 	width:Ti.UI.SIZE,
@@ -28,9 +28,15 @@
 	top:"35dp",
     height:"85dp",
     width:"85dp",
+    zIndex: 2,
+},
+"#reference":{
+	top:"125dp",
+	bottom:"5dp",
+    font: {fontSize:"10dp"},	
 },
 "#goButton":{
-	bottom:"10dp",
+	bottom:"20dp",
 	right:"30dp",
 	height:"30dp",
 	width:"60dp",

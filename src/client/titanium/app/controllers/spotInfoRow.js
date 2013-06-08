@@ -12,3 +12,7 @@ $.row.touchEnabled = args.touchEnabled;
 $.row.selectionStyle = args.selectionStyle;
 $.row.hasChild = args.hasChild;
 $.row.imageView = args.imageView;
+
+if(args.right){
+	$.param.right = args.right;  
+}

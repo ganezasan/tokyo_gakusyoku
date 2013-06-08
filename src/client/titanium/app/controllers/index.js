@@ -7,6 +7,9 @@ if(!Titanium.Network.online){
 // APIMapper の準備
 var ApiMapper = require("apiMapper").ApiMapper;
 
+//バージョン確認
+checkVersion();
+
 // Facebook Consumer Token & Secret
 // TODO: あとで別ファイル管理にする
 Ti.Facebook.appid = Alloy.Globals.app.facebook_appid;
@@ -27,7 +30,6 @@ $.ds.innerwin.addEventListener('focus', function(){
         initUser();
         initView();
     }
-
     loadSpot();
 });
 
@@ -42,6 +44,36 @@ if (Ti.Platform.osname === 'iphone'){
     $.win.open();
 }
 
+/*
+ * アプリのバージョンが最新版か確認する
+ */
+function checkVersion(){	
+    // すでにログイン済みのときは、API をたたいてユーザ情報を取得
+    var apiMapper = new ApiMapper();
+    apiMapper.checkVersionApi(
+    	Alloy.Globals.app.version,
+        function(){
+            // 成功したとき
+            var json = eval('(' + this.responseText + ')');
+			if(json.meta.status == false){
+				alert("2");
+				alert(json.meta.statsu);
+				var dialog = Ti.UI.createAlertDialog({
+				    message: '新しいバージョンが出ています。アップデートお願いします。',
+				    ok: 'OK',
+				    title: 'Info'
+				}).show();
+				dialog.addEventListener('click', function(e){
+					Titanium.Platform.openURL(Alloy.Globals.app.url);
+				});
+			}
+       },
+        function(){
+            // 失敗したとき
+            alert('データの取得に失敗しました。');
+        }
+    );
+}
 /**
  * 巡礼地一覧にスポットデータをマッピングする
  *
@@ -177,6 +209,7 @@ function loadSpot(){
     			tmpData.latitude = json.spots[i].location.lat;
     			tmpData.longitude = json.spots[i].location.lon;
 				tmpData.picture = json.spots[i].picture;
+				tmpData.reference = json.spots[i].reference;
     			tmpData.checkin = false;     // checkinしたか
     			spotData[tmpData.spot_id] = tmpData;
     		}

@@ -36,13 +36,12 @@ loadSpotImages = function(spotId){
 				item = {
 				  path:imageUrl+json.spotImages[i].file_name,
 				  thumbPath:thumbUrl+json.spotImages[i].thumbnails,
-				  caption: json.spotImages[i].file_name
+				  caption: json.spotImages[i].comment
 				};
 				images.push(item);
     		}
     		var pictureGallery = PictureGallery.createWindow({
 			  images: images,
-			  title: 'Holiday pictures', //学食名に変更する
 			  windowGroup: $.nav
 			});
 			$.win.add(pictureGallery);
