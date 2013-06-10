@@ -8,6 +8,12 @@ var apiMapper = new ApiMapper();
 var args = arguments[0] || {};
 $.args =  args;
 
+// 呼び出し元からナビゲーションバーをセットする
+exports.setNavigation = function(nav,parent){
+    $.nav = nav;
+    $.parent = parent;
+};
+
 // ユーザ情報をマッピング
 $.user_icon.image = Alloy.Globals.user.icon_url;
 $.username.text = Alloy.Globals.user.name;
@@ -68,7 +74,7 @@ $.switch_twitter.addEventListener('change', function(e){
 
         // 認証
         twitterApi.init();
-    }else{
+    }else{    	
         // OFF のときは更新
         updateSocialSetting(
         	e.source.value, 
@@ -139,7 +145,7 @@ function loginFacebook(e){
             }
         },
         function(){
-        	alert("登録に失敗しました");
+        	alert("認証に失敗しました");
         }
     );
 }
@@ -150,7 +156,11 @@ function loginFacebook(e){
  * @param  share        1: ON, 0, OFF
  * @return void
  */
-function updateSocialSetting(switch_button, social_type, token, secret, share, fb_username, tw_username){
+function updateSocialSetting(switch_button, social_type, token, secret, share, fb_username, tw_username){	
+	//他の操作不可とする
+	$.nav.setTouchEnabled(false);
+	$.setting.opacity = 0.7;
+
     apiMapper.userNotificationApi(
         Alloy.Globals.user.token,
         social_type,
@@ -160,11 +170,19 @@ function updateSocialSetting(switch_button, social_type, token, secret, share, f
         fb_username,
         tw_username,
         function(e){
+			//操作可能にする
+			$.nav.setTouchEnabled(true);
+			$.setting.opacity = 1.0;
+
 			alert("更新しました");
             $.switch_button.value = share;
         },
         function(e){
-        	alert(this.responseText);
+			//操作可能にする
+			$.nav.setTouchEnabled(true);
+			$.setting.opacity = 1.0;
+
+        	// alert(this.responseText);
             alert('更新に失敗しました。[notification]');
             $.switch_button.value = !share;  // 元に戻す
         }

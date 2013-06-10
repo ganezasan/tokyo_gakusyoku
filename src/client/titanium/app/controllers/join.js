@@ -45,6 +45,7 @@ $.doneButton.addEventListener('click', function(){
             $.parent.close();
         },
         function(e){
+        	// alert(this.responseText);
             // 失敗したとき
             if(typeof this.responseText == 'undefined'){
                 // FrapiErrorのとき（ハンドリングしていないエラー）
@@ -54,7 +55,7 @@ $.doneButton.addEventListener('click', function(){
             // ハンドリングしたエラーレスポンスがあるとき
             Ti.API.info(this.responseText);
             var json = eval('(' + this.responseText + ')');
-			alert(json);
+			// alert(json);
             switch(json.meta.code){
                 case '0001':
                 alert('すでにユーザ名が利用されています');

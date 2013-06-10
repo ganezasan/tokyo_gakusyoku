@@ -15,66 +15,34 @@ $.args =  args;
 var initFlag = 0;
 
 // 表示設定
-// $.title.text = args.title || '';
-// $.description.text = $.args.description || '';
-// $.tableView.data = table_views();
-$.spotInfo.addEventListener('focus', function(){
-	//テーブルデータをセット
-	tableDataSet($.args.spot_id);
-});
-
-//テーブルを表示
-// tableDataSet($.args.spot_id);
-
 // 呼び出し元からナビゲーションバーをセットする
 exports.setNavigation = function(nav, parent){
     $.nav = nav;
     $.parent = parent;
 };
 
+$.spotInfo.addEventListener('focus', function(){
+	//テーブルデータをセット
+	tableDataSet($.args.spot_id);
+});
+
 // Checkinの有効無効設定
 if( isUserLogined() &&
     isSpotNear($.args.currentPosition.latitude, $.args.currentPosition.longitude,
                $.args.spotPosition.latitude   , $.args.spotPosition.longitude)
-    ){
+    ){    
     // チェックイン許可
-    // $.comment.touchEnabled = true;
-    // $.comment.value = $.args.comment || '';
-    // $.comment.opacity = 1;
     $.checkinButton.touchEnabled = true;
     $.spotInfo.opacity = 1;
 }else{
     // チェックイン拒否
-
-    // ログイン状態に応じてコメントを変更
-    if(isUserLogined()){
-        if($.args.checkin){
-            // すでにチェックインしていたときはコメントを入力
-            // $.comment.value = $.args.comment;
-        }else{
-            //$.comment.value = "スポットに近づくとチェックインすることができます";
-        }
-    }else{
-//        $.comment.value = "チェックインをするにはログインする必要があります";
+    if(!isUserLogined()){
         alert('チェックインするにはユーザ登録が必要です');
     }
 
-	//後で戻す
-    // $.comment.touchEnabled = false;
-    // $.comment.opacity = 0.70;
-    // $.checkinButton.touchEnabled = false;
-    // $.checkinButton.opacity = 0.70;
+    $.checkinButton.touchEnabled = false;
+    $.checkinButton.opacity = 0.70;
 }
-
-/**
- * コメントボックスフォーカス時の設定
- */
-// $.comment.addEventListener('focus', function(e){
-    // // 1. 右上にチェックインボタンを表示する（キーボードで下部のチェックインボタンが隠れてしまうため）
-    // var checkinButton = Ti.UI.createButton({title: 'Checkin'});
-    // checkinButton.addEventListener('click', checkinSpot);
-    // $.checkin.rightNavButton = checkinButton;
-// });
 
 /**
  * スポットにチェックインする

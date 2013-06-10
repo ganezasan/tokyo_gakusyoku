@@ -47,7 +47,7 @@ var loginFacebook = function(e){
             }
         },
         function(){
-        	alert("登録に失敗しました");
+        	alert("認証に失敗しました");
         }
     );
 };
@@ -88,7 +88,7 @@ $.twitterButton.addEventListener('click', function(e) {
                     tw_username: responseParams['screen_name'],
                 };
 
-				alert(args);
+				// alert(args);
                 // TODO: 冗長なので綺麗にしたい
                 var controller = Alloy.createController('join', args);
                 var view = controller.getView();

@@ -55,17 +55,23 @@ function checkVersion(){
         function(){
             // 成功したとき
             var json = eval('(' + this.responseText + ')');
-			if(json.meta.status == false){
-				alert("2");
-				alert(json.meta.statsu);
+			if(json.meta.status == "false"){
 				var dialog = Ti.UI.createAlertDialog({
 				    message: '新しいバージョンが出ています。アップデートお願いします。',
-				    ok: 'OK',
-				    title: 'Info'
-				}).show();
-				dialog.addEventListener('click', function(e){
-					Titanium.Platform.openURL(Alloy.Globals.app.url);
+				    buttonNames: ['OK'],
+				    title: 'Info',
+				    // キャンセルボタンがある場合、何番目(0オリジン)のボタンなのかを指定できます。
+    				// cancel: 1
 				});
+				dialog.addEventListener('click', function(e){
+					// 選択されたボタンのindexも返る
+				    if(e.index == 0){
+				        // "OK"時の処理
+						Titanium.Platform.openURL(Alloy.Globals.app.url);
+				    }
+				});
+				dialog.show();
+				
 			}
        },
         function(){
@@ -232,8 +238,8 @@ function loadSpot(){
                     } ,
                     function(e){
                         alert('データの取得に失敗しました。 [userMy]');
-                        alert(e);
-						alert(this.responseText);
+                        // alert(e);
+						// alert(this.responseText);
                         Ti.API.info(this.responseText);
             		    // マスタデータのみ表示
                         mapView.setAnnotation(spotData);
@@ -272,6 +278,7 @@ function initView(){
 $.ds.setting.addEventListener('click', function(){
     var controller = Alloy.createController('setting');
     var win = controller.getView();
+	controller.setNavigation($.ds.nav,win);
     win.title = "設定";
     $.ds.nav.title = '設定';
     $.ds.nav.open(win);

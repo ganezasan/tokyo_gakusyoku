@@ -62,22 +62,10 @@ if( isUserLogined() &&
     }
 
 	//あとで戻す
-    // $.comment.touchEnabled = false;
-    // $.comment.opacity = 0.70;
     // $.checkinButton.touchEnabled = false;
     // $.checkinButton.touchEnabled = false;
     // $.checkinButton.opacity = 0.70;
 }
-
-/**
- * コメントボックスフォーカス時の設定
- */
-// $.comment.addEventListener('focus', function(e){
-    // // 1. 右上にチェックインボタンを表示する（キーボードで下部のチェックインボタンが隠れてしまうため）
-    // var checkinButton = Ti.UI.createButton({title: 'Checkin'});
-    // checkinButton.addEventListener('click', checkinSpot);
-    // $.checkin.rightNavButton = checkinButton;
-// });
 
 /**
  * スポットにチェックインする
@@ -144,7 +132,7 @@ var checkinSpot = function checkinSpot(){
 			win2.close({transform:t3,duration:300});	
 
 			//操作可能にする
-			$.checkin.setTouchEnabled(true);
+			$.nav.setTouchEnabled(true);
 			$.checkin.opacity = 1.0;
 
             //失敗時
@@ -249,8 +237,6 @@ function selectFromPhotoGallery() {
             success: function(event) {
                 var image = event.media;
 		        setImage(image);
-                // $.imageView.image = image;
-                //消した uploadToTwitPic(image);
              },
             // error:  function(error) { },
             // cancel: function() { },
@@ -259,57 +245,6 @@ function selectFromPhotoGallery() {
         }
     );
 }
-
-// function uploadImage() {
-	// Titanium.Media.openPhotoGallery({
-		// success:function(event)
-		// {
-			// Ti.API.info("success! event: " + JSON.stringify(event));
-			// var media = event.media;
-			// var name = 'test.png'
-		    // var dialog = Ti.UI.createAlertDialog({
-		        // message: event,
-		        // ok: 'OK',
-		        // title: 'Metadata'
-		    // }).show();
-// 		    
-			// var xhr = Titanium.Network.createHTTPClient();
-		    // var url = "http://54.248.225.182/api/spot/up_image.json";
-			// xhr.open('POST', url);
-			// var f1 = Titanium.Filesystem.getFile('twitterButton@2x.png');
-			// var myimage=f1.read();
-			// //通信する
-			// // xhr.send({image:myimage,name:'twitterButton@2x.png'});	
-			// xhr.send({image:event.media,name:name});	
-// 
-			// xhr.onerror = function(e)
-				// {
-					// Ti.UI.createAlertDialog({title:'Error', message:e.error}).show();
-					// Ti.API.info('IN ERROR ' + e.error);
-				// };
-			// xhr.onload = function(e)
-				// {
-					// // Ti.UI.createAlertDialog({title:'Success', message:'status code ' + this.status}).show();
-					// Ti.API.info('IN ONLOAD ' + this.status + ' readyState ' + this.readyState);
-		            // Ti.API.info("Received text: " + this.responseText);
-		   		// };
-			// xhr.onsendstream = function(e)
-				// {
-					// ind.value = e.progress ;
-					// Ti.API.info('ONSENDSTREAM - PROGRESS: ' + e.progress);
-				// };
-		// },
-		// cancel:function()
-			// {
-				// Ti.API.info('cancel');
-			// },
-		// error:function(error)
-			// {
-				// Ti.API.info('error');
-			// },
-		// allowEditing:false
-	// });
-// }
 
 function table_views(tableData) {
 	// create table view data object
@@ -338,8 +273,8 @@ function table_views(tableData) {
             var selectButton = Ti.UI.createButton({title: '決定'});
         	//決定ボタン設置
 			selectButton.addEventListener('click', function() {
-			  	if(parseInt(common.jstrlen(controller.textArea.value)) > 1000){
-			  		alert("1000文字を超えています。");
+			  	if(parseInt(common.jstrlen(controller.textArea.value)) > 140){
+			  		alert("140文字を超えています。");
 			  	}else{
 				    setComment(controller.textArea.value);
 				    $.nav.close(view);			  		

@@ -5,7 +5,7 @@
   }
 },
 "#row": {
-	height:'55pt',
+	height:'85pt',
 },
 "#title": {
 	width:Ti.UI.SIZE,
@@ -27,8 +27,8 @@
 "#imageView": {
 	top:"5dp",
 	right: "30dp",
-    height:"45dp",
-    width:"45dp",
+    height:"75dp",
+    width:"75dp",
 },
 
 
