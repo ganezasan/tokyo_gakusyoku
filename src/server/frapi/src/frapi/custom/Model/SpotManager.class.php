@@ -11,7 +11,7 @@ class SpotManager extends OhenroBase {
         }
 
         // Spot 作成
-        $spot = new Spot($r->id, $r->name, $r->number, $r->lat, $r->lon, $r->description);
+        $spot = new Spot($r->id, $r->name, $r->group1, $r->group2,  $r->number, $r->lat, $r->lon, $r->description, $r->picture, $r->reference);
 
         return $spot;
     }
@@ -22,7 +22,7 @@ class SpotManager extends OhenroBase {
     public static function generateByUserId($user_id){
         $db = Zend_Db_Table::getDefaultAdapter();
         $select = $db->select()
-            ->from(array('c' => 'Checkin'))
+            ->from(array('c' => 'checkins'))
             ->join(
                 array('s' => 'SpotMaster'),
                 's.id = c.spot_id',

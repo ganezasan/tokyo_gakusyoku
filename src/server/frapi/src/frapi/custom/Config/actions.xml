@@ -174,7 +174,6 @@ HEAD: Retrieve the meta information relative to a sibling.&#13;
    <name>User_notification</name>
    <enabled>1</enabled>
    <public>1</public>
-   <description></description>
    <route>api/user/notification</route>
    <hash>8d58aea30d08b8a14e43710f4a0409458746f18d</hash>
    <parameters>
@@ -199,6 +198,97 @@ HEAD: Retrieve the meta information relative to a sibling.&#13;
      <required>1</required>
     </parameter>
    </parameters>
+  </action>
+  <action>
+   <name>Spot_upimage</name>
+   <enabled>1</enabled>
+   <public>1</public>
+   <route>api/spot/up_image</route>
+   <hash>24a2c63d8e4896ca90b5d93ae1acd89f52b13fb6</hash>
+   <parameters>
+    <parameter>
+     <name>image</name>
+     <required>1</required>
+    </parameter>
+   </parameters>
+  </action>
+  <action>
+   <name>Spot_getimage</name>
+   <enabled>1</enabled>
+   <public>1</public>
+   <route>api/spot/get_image</route>
+   <hash>458d9c3aca714cfe0e0736af646d060cf4cc3a68</hash>
+   <parameters>
+    <parameter>
+     <name>spot_id</name>
+     <required>1</required>
+    </parameter>
+   </parameters>
+  </action>
+  <action>
+   <name>Spot_countinfo</name>
+   <enabled>1</enabled>
+   <public>1</public>
+   <route>api/spot/countinfo</route>
+   <hash>50362b2a4d69b2c1e634455bf5dcbf45f98b7e0f</hash>
+   <parameters>
+    <parameter>
+     <name>spot_id</name>
+     <required>1</required>
+    </parameter>
+   </parameters>
+  </action>
+  <action>
+   <name>Add_gospot</name>
+   <enabled>1</enabled>
+   <public>1</public>
+   <route>api/spot/add_gospot</route>
+   <hash>b27227f8b95f3232c9d6d43e4e9d31bc8ef2f75c</hash>
+   <parameters>
+    <parameter>
+     <name>token</name>
+     <required>1</required>
+    </parameter>
+    <parameter>
+     <name>spot_id</name>
+     <required>1</required>
+    </parameter>
+   </parameters>
+  </action>
+  <action>
+   <name>Spot_getcheckin</name>
+   <enabled>1</enabled>
+   <public>1</public>
+   <route>api/spot/get_checkin</route>
+   <hash>cb66a88f677c7b91a4eba5c8605bdaca8f7c86ff</hash>
+   <parameters>
+    <parameter>
+     <name>spot_id</name>
+     <required>1</required>
+    </parameter>
+   </parameters>
+  </action>
+  <action>
+   <name>Spot_getcomment</name>
+   <enabled>1</enabled>
+   <public>1</public>
+   <route>api/spot/get_comment</route>
+   <hash>b5c5604a5bdf8d2549351e31d64d809efa3c47e9</hash>
+   <parameters>
+    <parameter>
+     <name>spot_id</name>
+     <required>1</required>
+    </parameter>
+   </parameters>
+  </action>
+  <action>
+   <name>Check_version</name>
+   <enabled>1</enabled>
+   <public>1</public>
+   <description></description>
+   <route>/api/version/check</route>
+   <parameters></parameters>
+   <hash>7317da477a95f6c7aab81d80dff0d09e2bd0ffb0</hash>
   </action>
  </actions>
 </frapi-config>

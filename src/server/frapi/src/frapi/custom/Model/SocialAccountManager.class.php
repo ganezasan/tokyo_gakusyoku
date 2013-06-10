@@ -20,8 +20,17 @@ class SocialAccountManager extends OhenroBase {
         // 存在しないときは 空配列 を返却
         $socialAccounts = array();
         foreach($rows as $row){
-            $socialAccounts[] = new SocialAccount(
-                $row->user_id, $row->social_type, $row->token, $row->secret, $row->share, $row->created_at, $row->updated_at
+	   $socialAccounts[] = new SocialAccount(
+                $row->id,
+		$row->user_id,
+		$row->social_type,
+		$row->token,
+		$row->secret,
+		$row->share,
+		$row->fb_username,
+		$row->tw_username,
+		$row->created_at,
+		$row->updated_at
             );
         }
 
@@ -48,7 +57,27 @@ class SocialAccountManager extends OhenroBase {
         }
 
         return new SocialAccount(
-            $row->user_id, $row->social_type, $row->token, $row->secret, $row->share, $row->created_at, $row->updated_at
+            $row->user_id,
+			$row->social_type,
+			$row->token,
+			$row->secret,
+			$row->share,
+			$row->fb_username,
+			$row->tw_username,
+			$row->created_at,
+			$row->updated_at
         );
     }
+	
+	public static function getSocialAccountId($user_id){
+	$socialAccountsTable = new Zend_Db_Table('SocialAccounts');
+        $select = $socialAccountsTable->select()
+				->where('user_id = ?', $user_id)
+				->order(array('social_type DESC'));
+		$rowset = $socialAccountsTable->fetchAll($select);
+		$row = $rowset->current();
+		
+		return $row->id;
+	}
+
 }

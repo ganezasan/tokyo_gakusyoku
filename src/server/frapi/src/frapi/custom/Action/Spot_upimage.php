@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Action User_notification 
+ * Action Spot_upimage 
  * 
  * Array
  * 
  * @link http://getfrapi.com
  * @author Frapi <frapi@getfrapi.com>
- * @link api/user/notification
+ * @link api/spot/up_image
  */
-class Action_User_notification extends Frapi_Action implements Frapi_Action_Interface
+class Action_Spot_upimage extends Frapi_Action implements Frapi_Action_Interface
 {
 
     /**
@@ -18,9 +18,7 @@ class Action_User_notification extends Frapi_Action implements Frapi_Action_Inte
      * @var An array of required parameters.
      */
     protected $requiredParams = array(
-        'token',
-        'social_type',
-        'post'
+        'image',
         );
 
     /**
@@ -40,14 +38,8 @@ class Action_User_notification extends Frapi_Action implements Frapi_Action_Inte
      */
     public function toArray()
     {
-        $this->data['token'] = $this->getParam('token', self::TYPE_OUTPUT);
-        $this->data['social_type'] = $this->getParam('social_type', self::TYPE_OUTPUT);
-        $this->data['social_token'] = $this->getParam('social_token', self::TYPE_OUTPUT);
-        $this->data['social_secret'] = $this->getParam('social_secret', self::TYPE_OUTPUT);
-        $this->data['post'] = $this->getParam('post', self::TYPE_OUTPUT);
-        $this->data['fb_username'] = $this->getParam('fb_username', self::TYPE_OUTPUT);
-	$this->data['tw_username'] = $this->getParam('tw_username', self::TYPE_OUTPUT);
-	return $this->data;
+        $this->data['image'] = $this->getParam('image', self::TYPE_OUTPUT);
+        return $this->data;
     }
 
     /**
@@ -93,45 +85,37 @@ class Action_User_notification extends Frapi_Action implements Frapi_Action_Inte
      */
     public function executePost()
     {
-        // 必須チェック
         $valid = $this->hasRequiredParameters($this->requiredParams);
         if ($valid instanceof Frapi_Error) {
             throw $valid;
         }
 
-        $user = UserFactory::generateByToken($this->getParam('token'));
-        if(!$user){
-            throw new Exception('Invalid token');
-        }
+		// 画像保存先のディレクトリ
+		$save_dir ="/tmp/image/";
 
-        // アカウントを作成（存在しないアカウントの場合は、NULLが返却）
-        $socialAccount = SocialAccountManager::generateByUserId($user->id, $this->getParam('social_type'));
+		if(!isset($_FILES)){
+				$json = "{\"error\":\"files\"}";
+		}elseif(!isset($_FILES["image"])){
+				$json = "{\"error\":\"files_media\"}";
+		}elseif(!isset($_FILES["image"]["name"])){
+				$json = "{\"error\":\"files_media_name\"}";
+		}else{
+				$fname = 'test01.jpg';
+				$target_path = $save_dir . $fname;
+				// アップロードファイルの保存
+				if(!move_uploaded_file($_FILES['image']['tmp_name'],$target_path)){
+						$json = "{\"error\":\"Can not Upload Image.{$fname}\"}";
+				}else{
+						$json = "{\"error\":\"\"}";
 
-        if($socialAccount){
-            // すでに存在するときは設定を変更
-            $socialAccount = $socialAccount[0];
-            var_dump($socialAccount);
-	    $socialAccount->id = $socialAccount->id;
-	    $socialAccount->token = ($this->getParam('social_token') ?: $socialAccount->token);
-            $socialAccount->secret = ($this->getParam('social_secret') ?: $socialAccount->secret);
-            $socialAccount->share = $this->getParam('post');
-	    $socialAccount->update();
-        }else{
-            // 存在しないときは新規作成
-            $socialAccount = new SocialAccount(
-        	null,
-	        $user->id, 
-		$this->getParam("social_type"), 
-		$this->getParam("social_token"),
-                $this->getParam("social_secret"), 
-		$this->getParam("post"),
-		$this->getParam("fb_username"),
-		$this->getParam("tw_username")
-            );
-	    $socialAccount->save();       
- 	}
-
-        return array("meta" => array("status" => "true"));
+				}
+		}
+		// 処理結果をjsonで返す
+		//header("Content-Type: text/javascript; charset=utf-8");
+		//print $json;    
+		error_log($_FILES['image']['error'], 3, '/var/tmp/app.log');
+		return array("upload" => $json, "meta" => array("status" => "true"));
+		//return $this->toArray();
     }
 
     /**
