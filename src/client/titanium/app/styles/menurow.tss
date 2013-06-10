@@ -9,7 +9,7 @@
   height: Ti.UI.SIZE
 },
 "#row": {
-	height:'60pt',
+	height:'45pt',
 	selectedBackgroundColor : "#FFF",
 	selectedColor: 'white',
 	backgroundGradient : {
@@ -39,4 +39,11 @@
 },
 "#title": {
   left: "26dp"
+},
+"#subTitle":{
+  left: "26dp",
+  font: {
+    fontSize: "10"
+  }
 }
+

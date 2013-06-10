@@ -19,7 +19,6 @@ var loginFacebook = function(e){
 
     // アクセストークン取得
     access_token = Ti.Facebook.getAccessToken(),
-
     // 名前を取得して次の画面へ
     Ti.Facebook.requestWithGraphPath(
         'me?fields=username,picture',
@@ -33,8 +32,11 @@ var loginFacebook = function(e){
                 var args = {
                     social_token: access_token,
                     username: obj.username,
+                    social_secret:'',
                     social_type: fbSocial_type,
                     picture: obj.picture.data.url,
+                    fb_username: obj.username,
+					tw_username: '',
                 };
             	var controller = Alloy.createController('join', args);
             	var view = controller.getView();
@@ -43,6 +45,9 @@ var loginFacebook = function(e){
                 $.nav.open(view);
                 $.nav.close($.parent);
             }
+        },
+        function(){
+        	alert("認証に失敗しました");
         }
     );
 };
@@ -63,10 +68,10 @@ $.twitterButton.addEventListener('click', function(e) {
 	//initialization
 	var twitterApi = new TwitterApi({
 	    consumerKey: Alloy.Globals.app.twitter_consumer_token,
-	    consumerSecret:Alloy. Globals.app.twitter_consumer_secret,
+	    consumerSecret: Alloy.Globals.app.twitter_consumer_secret,
 	});
-
-
+	//いったん初期化
+	twitterApi.clear_accesstoken();
 	// TODO: エレガントな方法もとむ
 	// コールバックができなかったので
 	// oauth_adapter.js の getAccessToken メソッドにて、Alloy.Globals.setTwitterAccount() を直に書いてコールしている
@@ -80,8 +85,10 @@ $.twitterButton.addEventListener('click', function(e) {
                     username: responseParams['screen_name'],
                     social_type: TwSocial_type,
                     picture: e['profile_image_url'],
+                    tw_username: responseParams['screen_name'],
                 };
 
+				// alert(args);
                 // TODO: 冗長なので綺麗にしたい
                 var controller = Alloy.createController('join', args);
                 var view = controller.getView();

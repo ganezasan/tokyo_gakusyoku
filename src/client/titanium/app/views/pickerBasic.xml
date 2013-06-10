@@ -1,0 +1,10 @@
+<Alloy>
+	<Window class="container">
+		<View>
+			<!-- <Picker id="pic">
+				<PickerRow id="pickerRow"></PickerRow>
+			</Picker>
+			<Button id="selectButton" title="決定" onClick="selectParam" /> -->
+		</View>
+	</Window>
+</Alloy>
