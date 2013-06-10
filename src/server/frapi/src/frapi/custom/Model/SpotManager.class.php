@@ -22,7 +22,7 @@ class SpotManager extends OhenroBase {
     public static function generateByUserId($user_id){
         $db = Zend_Db_Table::getDefaultAdapter();
         $select = $db->select()
-            ->from(array('c' => 'checkins'))
+            ->from(array('c' => 'Checkins'))
             ->join(
                 array('s' => 'SpotMaster'),
                 's.id = c.spot_id',

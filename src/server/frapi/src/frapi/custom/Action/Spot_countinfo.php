@@ -71,9 +71,9 @@ class Action_Spot_countinfo extends Frapi_Action implements Frapi_Action_Interfa
             throw $valid;
         }
 	//場所に紐づく画像数を取得
-	$spotImagesManager = new SpotImagesManager();
+	$photoManager = new PhotoManager();
 	$spot_id = $this->getParam('spot_id');
-	$spotImageRow = $spotImagesManager->getImagesCount($spot_id);
+	$spotImageRow = $photoManager->getImagesCount($spot_id);
 
 	//場所に紐づくチェックイン数、コメント数を取得
 	$checkinManager = new CheckinManager();
