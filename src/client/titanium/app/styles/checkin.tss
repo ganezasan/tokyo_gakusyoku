@@ -6,10 +6,14 @@
 "#scrollView": {
 	layout:'vertical',
 },
-"#description": {
-    width: '90%',
-    height: Ti.UI.SIZE,
+"#tableView":{
+    height: '82%',
+    style: Titanium.UI.iPhone.TableViewStyle.GROUPED,
 },
+// "#description": {
+    // width: '90%',
+    // height: Ti.UI.SIZE,
+// },
 "#comment": {
     height: '120dp',
     width: '90%',
@@ -37,3 +41,7 @@
     borderColor: "black",
     borderRadius: 5,
 },
+"#tableSection" : {
+    color: '#55aa55',
+	font: {fontSize:"13dp" ,fontWeight:"normal"},	
+}

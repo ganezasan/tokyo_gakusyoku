@@ -3,6 +3,7 @@
     <ImageView id="icon"/>
     <View class="vgroup">
       <Label id="title"/>
+      <Label id="subTitle"/>
     </View>
   </TableViewRow>
 </Alloy>

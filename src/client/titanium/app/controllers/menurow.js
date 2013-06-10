@@ -8,6 +8,8 @@ if(args.checkin){
 
 // タイトル
 $.title.text = args.title || '';
+// サブタイトル設定
+$.subTitle.text = args.subTitle || '';
 
 // 任意プロパティ
 $.row.customTitle = args.title;

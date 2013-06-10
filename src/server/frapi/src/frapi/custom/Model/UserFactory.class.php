@@ -33,7 +33,6 @@ class UserFactory extends OhenroBase {
         // ユーザ
         $select = $usersTable->select()->where('id = ?', $user_id);
         $row = $usersTable->fetchRow($select);
-
         // 存在しないときは null を返却
         if(!$row){
             return null;

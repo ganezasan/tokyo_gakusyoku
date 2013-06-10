@@ -1,0 +1,9 @@
+<Alloy>
+　　<TableViewRow id="row">
+	    <!-- <View class="vgroup"> -->
+		<Label id="title">title</Label>
+		<Label id="param">param</Label>
+		<Label id="comment"></Label>
+	    <!-- </View> -->
+　　</TableViewRow>
+</Alloy>

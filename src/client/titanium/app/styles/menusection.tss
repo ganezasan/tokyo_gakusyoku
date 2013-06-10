@@ -1,0 +1,40 @@
+"Label": {
+  color: "#666",
+  font: {
+    fontSize: "16"
+  }
+},
+"#sectionHeader": {
+  layout: "vertical",
+  height: "auto",
+  backgroundGradient : {
+	  type : "linear",
+	  startPoint : {
+	    x : "0%",
+	    y : "0%"
+	  },
+	  endPoint : {
+	    x : "0%",
+	    y : "100%"
+	  },
+	  colors : [{
+	    color : "#55aa55",
+	    offset : 0.0
+	  }, {
+	    color : "#2b552b",
+	    offset : 1.0
+	  }]
+  }
+},
+"#sectionTitle": {
+    top : 8,
+    bottom : 8,
+    left : 10,
+    right : 10,
+    height : "auto",
+    font : {
+      fontSize : 12,
+      fontWeight : 'bold'
+    },
+    color : '#f8fcf8'
+}

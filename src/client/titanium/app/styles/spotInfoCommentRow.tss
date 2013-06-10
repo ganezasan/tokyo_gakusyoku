@@ -1,0 +1,41 @@
+".container": {
+    backgroundColor: 'white',
+    barColor: 'black',
+	layout:'vertical',
+},
+"Label": {
+  color: "#666",
+  font: {
+    fontSize: "16"
+  }
+},
+"#row": {
+	height:"auto",
+	// height:'130pt',
+	zIndex: 2,
+},
+"#title": {
+	width:Ti.UI.SIZE,
+	top:"6dp",
+    left: "72dp",
+    height:"30dp",
+    font: {fontSize:"14dp" ,fontWeight:"normal"},
+},
+"#comment": {
+	height:Ti.UI.SIZE,
+    // height:"40dp",
+	width:Ti.UI.SIZE,
+	top:"42dp",
+	left: "72dp",
+	bottom: "12dp",
+    color: "#2b552b",
+    font: {fontSize:"16dp",fontWeight:"bold"},
+},
+"#imageView": {
+	left:"12dp",
+	top:"12dp",
+    height:"50dp",
+    width:"50dp",
+	bottom:"12dp",
+}
+

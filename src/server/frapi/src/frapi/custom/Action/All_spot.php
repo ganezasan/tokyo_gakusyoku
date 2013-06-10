@@ -67,13 +67,17 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
             $response[] = array(
                 "id"    => $spot->id,
                 "name"  => $spot->name,
+				"group1" => $spot->group1,
+				"group2" => $spot->group2,
                 "number"  => $spot->number,
                 "location" => array(
                     "lat" => $spot->lat,
                     "lon" => $spot->lon,
                 ),
                 "description" => $spot->description,
-            );
+        	"picture" => $spot->picture,
+		"reference" => $spot->reference,
+	    );
         }
 
         return array("spots" => $response, "meta" => array("status" => "true"));

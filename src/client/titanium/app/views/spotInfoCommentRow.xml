@@ -1,0 +1,7 @@
+<Alloy>
+　　<TableViewRow id="row">
+		<ImageView id="imageView"/>
+		<Label id="title">title</Label>
+		<Label id="comment">param</Label>
+	</TableViewRow>
+</Alloy>

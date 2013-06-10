@@ -7,6 +7,9 @@ if(!Titanium.Network.online){
 // APIMapper の準備
 var ApiMapper = require("apiMapper").ApiMapper;
 
+//バージョン確認
+checkVersion();
+
 // Facebook Consumer Token & Secret
 // TODO: あとで別ファイル管理にする
 Ti.Facebook.appid = Alloy.Globals.app.facebook_appid;
@@ -27,7 +30,6 @@ $.ds.innerwin.addEventListener('focus', function(){
         initUser();
         initView();
     }
-
     loadSpot();
 });
 
@@ -42,6 +44,42 @@ if (Ti.Platform.osname === 'iphone'){
     $.win.open();
 }
 
+/*
+ * アプリのバージョンが最新版か確認する
+ */
+function checkVersion(){	
+    // すでにログイン済みのときは、API をたたいてユーザ情報を取得
+    var apiMapper = new ApiMapper();
+    apiMapper.checkVersionApi(
+    	Alloy.Globals.app.version,
+        function(){
+            // 成功したとき
+            var json = eval('(' + this.responseText + ')');
+			if(json.meta.status == "false"){
+				var dialog = Ti.UI.createAlertDialog({
+				    message: '新しいバージョンが出ています。アップデートお願いします。',
+				    buttonNames: ['OK'],
+				    title: 'Info',
+				    // キャンセルボタンがある場合、何番目(0オリジン)のボタンなのかを指定できます。
+    				// cancel: 1
+				});
+				dialog.addEventListener('click', function(e){
+					// 選択されたボタンのindexも返る
+				    if(e.index == 0){
+				        // "OK"時の処理
+						Titanium.Platform.openURL(Alloy.Globals.app.url);
+				    }
+				});
+				dialog.show();
+				
+			}
+       },
+        function(){
+            // 失敗したとき
+            alert('データの取得に失敗しました。');
+        }
+    );
+}
 /**
  * 巡礼地一覧にスポットデータをマッピングする
  *
@@ -52,86 +90,57 @@ if (Ti.Platform.osname === 'iphone'){
  */
 function setTableData(spotData){
 	var tableData = [];
-	var section = Ti.UI.createTableViewSection();
+	// 巡礼達成数をトップのヘッダーに追加するため、0番目はあけておく
+	tableData[0] = "";
 
-	// 巡礼地一覧
-	var checkinCount = 0;
+	var sectionNo = 1;
+	var checkinCount = 0; 
 	var spotCount = 0; // length は使わない
-	for ( var i in spotData) {
-        var args = {
-            title : spotData[i].title,
-            latitude : spotData[i].latitude,
-            longitude : spotData[i].longitude,
-            checkin: spotData[i].checkin,
-        };
-        section.add(Alloy.createController('menurow', args).getView());
 
-        // チェックイン済みの巡礼地数を取得（TODO: もっとよい方法求む）
-        if(spotData[i].checkin){
-            checkinCount++;
-        }
-        spotCount++;
-    }
+	for ( i = 1; i < spotData.length; i++) {
+	  //sectionの設定
+	  var sectionName = spotData[i].group1;
+      var args1 = {
+      	title :sectionName
+	  }
+	  var section = Alloy.createController('menusection', args1).getView();
+
+	  // 巡礼地一覧
+	  for ( j = i; j < spotData.length; j++) {
+	    if(sectionName == spotData[j].group1){
+	      var args2 = {
+            title : spotData[j].title,
+            subTitle : spotData[j].group2,
+            latitude : spotData[j].latitude,
+            longitude : spotData[j].longitude,
+            checkin: spotData[j].checkin,
+		  };
+	      section.add(Alloy.createController('menurow', args2).getView());
+          // チェックイン済みの巡礼地数を取得（TODO: もっとよい方法求む）
+	      if(spotData[j].checkin){
+	         checkinCount++;
+	      }
+	      spotCount++;
+    	  i++;
+    	}else{
+	  	  //上記のループにてiが足されているた次のループ時のために-1する
+		  i--;
+      	  break;
+   		}
+  	  }
+	  tableData[sectionNo] = section;
+  	  sectionNo++;
+	}
 
 	// Header の設定
-	var headerView = Ti.UI.createView({
-		height : 'auto',
-		backgroundGradient : {
-			type : "linear",
-			startPoint : {
-				x : "0%",
-				y : "0%"
-			},
-			endPoint : {
-				x : "0%",
-				y : "100%"
-			},
-			colors : [{
-				color : "#EEE",
-				offset : 0.0
-			}, {
-				color : "#CCC",
-				offset : 1.0
-			}]
-		}
-	});
-
-	var headerLabel = Ti.UI.createLabel({
-		top : 8,
-		bottom : 8,
-		left : 10,
-		right : 10,
-		height : 'auto',
-		text : "学食一覧",
-		font : {
-			fontSize : 18,
-			fontWeight : 'bold'
-		},
-		color : '#666666'
-	});
-	var countLabel = Ti.UI.createLabel({
-		top : 8,
-		bottom : 8,
-		right : 10,
-		height : 'auto',
-		text : "0 / " + spotCount + " 箇所巡りました",
-		font : {
-			fontSize : 10,
-			fontWeight : 'bold'
-		},
-		color : '#666666'
-	});
-
-    // countLabel変更
-    countLabel.text = checkinCount + " / " + spotCount + " 箇所達成\n残り " + (spotCount - checkinCount) + " 箇所";
-
-    // Viewをセット
-    headerView.add(headerLabel);
-    headerView.add(countLabel);
-    section.headerView = headerView;
-
+	var args3 = {
+      	headerLabel :"学食一覧",
+      	headCountLabel :checkinCount + " / " + spotCount + " 箇所達成\n残り " + (spotCount - checkinCount) + " 箇所"
+	};
+	tableData[0] = Alloy.createController('menuheadsection', args3).getView();
+    
     // テーブルに追加
-	$.ds.tableView.data = [section];
+	$.ds.tableView.data = tableData;
 };
 
 /**
@@ -194,16 +203,19 @@ function loadSpot(){
     apiMapper.spotAllApi(
     	function(){
     		// 成功したとき
-            var spotData = {};
+            var spotData = [];
     		var json = eval('(' + this.responseText + ')');
     		for(i = 0; i < json.spots.length; i++){
     		    var tmpData = new Object();
-    			tmpData.prefecture = '青森県'; //現在固定値
     			tmpData.spot_id = json.spots[i].id;
     			tmpData.title = json.spots[i].name;
+    			tmpData.group1 = json.spots[i].group1; //大学名
+    			tmpData.group2 = json.spots[i].group2; //キャンパス名
     			tmpData.description = json.spots[i].description;
     			tmpData.latitude = json.spots[i].location.lat;
     			tmpData.longitude = json.spots[i].location.lon;
+				tmpData.picture = json.spots[i].picture;
+				tmpData.reference = json.spots[i].reference;
     			tmpData.checkin = false;     // checkinしたか
     			spotData[tmpData.spot_id] = tmpData;
     		}
@@ -226,6 +238,8 @@ function loadSpot(){
                     } ,
                     function(e){
                         alert('データの取得に失敗しました。 [userMy]');
+                        // alert(e);
+						// alert(this.responseText);
                         Ti.API.info(this.responseText);
             		    // マスタデータのみ表示
                         mapView.setAnnotation(spotData);
@@ -264,6 +278,7 @@ function initView(){
 $.ds.setting.addEventListener('click', function(){
     var controller = Alloy.createController('setting');
     var win = controller.getView();
+	controller.setNavigation($.ds.nav,win);
     win.title = "設定";
     $.ds.nav.title = '設定';
     $.ds.nav.open(win);

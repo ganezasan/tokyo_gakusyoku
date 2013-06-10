@@ -1,0 +1,34 @@
+"Label": {
+  color: "#666",
+  font: {
+    fontSize: "16"
+  }
+},
+"#row": {
+	// height:'45pt',
+	// height:Ti.UI.SIZE,
+},
+"#title": {
+	width:Ti.UI.SIZE,
+	// height:Ti.UI.SIZE,
+	top:"0dp",
+    left: "12dp",
+    height:"40dp",
+    font: {fontSize:"16dp" ,fontWeight:"normal"},
+},
+"#param": {
+	// height:Ti.UI.SIZE,
+    height:"40dp",
+	width:Ti.UI.SIZE,
+	top:"0dp",
+	right: "30dp",
+    // color: "#ff9900",
+    font: {fontSize:"16dp",fontWeight:"bold"},
+},
+"#comment": {
+	top:"35dp",
+    left: "12dp",
+    font: {fontSize:"13dp" ,fontWeight:"normal"},	
+    color: "#bbb",
+    height:Ti.UI.SIZE,
+},
