@@ -1,7 +1,7 @@
 <?php
 class CheckinManager extends OhenroBase {
     public static function generateByCheckinId($checkin_id){
-        $checkinTable = new Zend_Db_Table('checkins');
+        $checkinTable = new Zend_Db_Table('Checkins');
         $select = $checkinTable->select()->where('id = ?', $checkin_id);
         $r = $checkinTable->fetchRow($select);
 
@@ -19,18 +19,18 @@ class CheckinManager extends OhenroBase {
     function getCheckinCount($spot_id){
         $db = Zend_Db_Table::getDefaultAdapter();
         $select = $db->select()
-                ->from('checkins', array('COUNT(*) as checkinCount','COUNT(comment_flag=1 or null) as commentCount'))
+                ->from('Checkins', array('COUNT(*) as checkinCount','COUNT(comment_flag=1 or null) as commentCount'))
                 ->where('spot_id = ?',$spot_id);
         return $db->fetchAll($select);
     }
 
     function getCheckin($spot_id){
-	$checkinTable = new Zend_Db_Table('checkins');
+	$checkinTable = new Zend_Db_Table('Checkins');
     	//$select = $checkinTable->select()->where('spot_id = ?', $spot_id);
    	//	return $checkinTable->fetchAll($select);
   	$db = Zend_Db_Table::getDefaultAdapter(); 
 	$select  = $db->select() //->setIntegrityCheck(false)
-		->from(array('c' => 'checkins'),
+		->from(array('c' => 'Checkins'),
 			array('comment' => 'comment',
 				'created_at' => "DATE_FORMAT(`c`.`created_at`,'%Y/%m/%d %k:%i')"))
 		->join(

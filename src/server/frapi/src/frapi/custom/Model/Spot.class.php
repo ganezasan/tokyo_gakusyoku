@@ -41,7 +41,7 @@ class Spot extends OhenroBase {
 	}
 
         // save
-        $checkinTable = new Zend_Db_Table('checkins');
+        $checkinTable = new Zend_Db_Table('Checkins');
 /*
 #        // Upsert
 #        $sql = <<<SQL
