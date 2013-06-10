@@ -147,7 +147,11 @@ class Action_Spot_checkin extends Frapi_Action implements Frapi_Action_Interface
 		error_log($_FILES["image"]["name"], 3, '/var/tmp/app.log');
 		error_log($_FILES["image"]["tmp_name"], 3, '/var/tmp/app.log');
 
-		$response['image'] = $json;
+		$response['image'] = array(
+					"id" => $checkin->id,
+					"created_at" => $checkin->created_at,
+					 "updated_at" => $checkin->updated_at,
+		);
 	
 		//morioka結合後修正予定
 		$photo = new Photo(
@@ -165,8 +169,8 @@ class Action_Spot_checkin extends Frapi_Action implements Frapi_Action_Interface
 			);
 
 		$photo->save();	
-		
-	}
+	}	
+	
 	
         return array("checkin" => $response, "meta" => array("status" => "true"));
 
