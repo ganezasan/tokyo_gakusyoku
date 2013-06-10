@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Action All_spot 
+ * Action Check_version 
  * 
- * https://cheekit.atlassian.net/wiki/pages/viewpage.action?pageId=6062153
+ * Array
  * 
  * @link http://getfrapi.com
  * @author Frapi <frapi@getfrapi.com>
- * @link api/spot/all
+ * @link /api/version/check
  */
-class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
+class Action_Check_version extends Frapi_Action implements Frapi_Action_Interface
 {
 
     /**
@@ -17,7 +17,9 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      * 
      * @var An array of required parameters.
      */
-    protected $requiredParams = array();
+    protected $requiredParams = array(
+	'version_id',	
+	);
 
     /**
      * The data container to use in toArray()
@@ -36,7 +38,8 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function toArray()
     {
-        return $this->data;
+    	$this->data['version_id'] = $this->getParam('version_id', self::TYPE_OUTPUT);
+	return $this->data;
     }
 
     /**
@@ -60,27 +63,16 @@ class Action_All_spot extends Frapi_Action implements Frapi_Action_Interface
      */
     public function executeGet()
     {
-        $spotMaster = new SpotMaster();
+     	$lastVer = VersionManager::getLatestVersionId();
+	$lastVer_id = $lastVer["version_id"];
+	$response;
 
-        $response = array();
-        foreach ($spotMaster->getAllSpots() as $spot){
-            $response[] = array(
-                "id"    => $spot->id,
-                "name"  => $spot->name,
-				"group1" => $spot->group1,
-				"group2" => $spot->group2,
-                "number"  => $spot->number,
-                "location" => array(
-                    "lat" => $spot->lat,
-                    "lon" => $spot->lon,
-                ),
-                "description" => $spot->description,
-        	"picture" => $spot->picture,
-		"reference" => $spot->reference,
-	    );
-        }
-
-        return array("spots" => $response, "meta" => array("status" => "true"));
+	if($lastVer_id > $this->getParam('version_id')){
+		$response = array("status" => "false");			
+	}else{
+		$response = array("status" => "true");
+	}
+	return array("version_id" => $lastVer_id ,"meta" =>$response); 
     }
 
     /**

@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Action User_notification 
+ * Action Spot_getcomment 
  * 
  * Array
  * 
  * @link http://getfrapi.com
  * @author Frapi <frapi@getfrapi.com>
- * @link api/user/notification
+ * @link api/spot/get_comment
  */
-class Action_User_notification extends Frapi_Action implements Frapi_Action_Interface
+class Action_Spot_getcomment extends Frapi_Action implements Frapi_Action_Interface
 {
 
     /**
@@ -17,11 +17,7 @@ class Action_User_notification extends Frapi_Action implements Frapi_Action_Inte
      * 
      * @var An array of required parameters.
      */
-    protected $requiredParams = array(
-        'token',
-        'social_type',
-        'post'
-        );
+    protected $requiredParams = array('spot_id');
 
     /**
      * The data container to use in toArray()
@@ -40,14 +36,8 @@ class Action_User_notification extends Frapi_Action implements Frapi_Action_Inte
      */
     public function toArray()
     {
-        $this->data['token'] = $this->getParam('token', self::TYPE_OUTPUT);
-        $this->data['social_type'] = $this->getParam('social_type', self::TYPE_OUTPUT);
-        $this->data['social_token'] = $this->getParam('social_token', self::TYPE_OUTPUT);
-        $this->data['social_secret'] = $this->getParam('social_secret', self::TYPE_OUTPUT);
-        $this->data['post'] = $this->getParam('post', self::TYPE_OUTPUT);
-        $this->data['fb_username'] = $this->getParam('fb_username', self::TYPE_OUTPUT);
-	$this->data['tw_username'] = $this->getParam('tw_username', self::TYPE_OUTPUT);
-	return $this->data;
+        $this->data['spot_id'] = $this->getParam('spot_id', self::TYPE_OUTPUT);
+        return $this->data;
     }
 
     /**
@@ -80,8 +70,41 @@ class Action_User_notification extends Frapi_Action implements Frapi_Action_Inte
         if ($valid instanceof Frapi_Error) {
             throw $valid;
         }
-        
-        return $this->toArray();
+       
+	$spot_id = $this->getParam('spot_id'); 
+	$checkinManager = new CheckinManager();
+	$checkins = $checkinManager->getCheckin($spot_id);	
+
+	$fb_api_path = "https://graph.facebook.com/";
+	$tw_api_path = "http://api.twitter.com/1/users/profile_image?screen_name=";
+
+         // response
+        $response = array(
+            "comments" => array(),
+       	   // "comments" => $checkins,
+	    "meta" => array("status" => "true"), 
+	);
+
+	foreach($checkins as $s){
+	    $socialType = $s["social_type"];
+	    
+  	   //1がtwitter, 2がfacebook
+	    if(strcmp($socialType,"1") == 0){
+		$imageUrl = $tw_api_path.$s["tw_username"];	
+	    }else{
+		$imageUrl = $fb_api_path . $s["fb_username"] . "/picture"; 
+	    }
+	
+            $response["comments"][] = array(
+                'username' => $s["name"],
+                'created_at' => $s["created_at"],
+		'comment' => $s["comment"],
+             //   'rating' => $s->rating,
+            	'imagePath' => $imageUrl
+		);
+	 }
+	
+	return $response;
     }
 
     /**
@@ -93,45 +116,12 @@ class Action_User_notification extends Frapi_Action implements Frapi_Action_Inte
      */
     public function executePost()
     {
-        // 必須チェック
         $valid = $this->hasRequiredParameters($this->requiredParams);
         if ($valid instanceof Frapi_Error) {
             throw $valid;
         }
-
-        $user = UserFactory::generateByToken($this->getParam('token'));
-        if(!$user){
-            throw new Exception('Invalid token');
-        }
-
-        // アカウントを作成（存在しないアカウントの場合は、NULLが返却）
-        $socialAccount = SocialAccountManager::generateByUserId($user->id, $this->getParam('social_type'));
-
-        if($socialAccount){
-            // すでに存在するときは設定を変更
-            $socialAccount = $socialAccount[0];
-            var_dump($socialAccount);
-	    $socialAccount->id = $socialAccount->id;
-	    $socialAccount->token = ($this->getParam('social_token') ?: $socialAccount->token);
-            $socialAccount->secret = ($this->getParam('social_secret') ?: $socialAccount->secret);
-            $socialAccount->share = $this->getParam('post');
-	    $socialAccount->update();
-        }else{
-            // 存在しないときは新規作成
-            $socialAccount = new SocialAccount(
-        	null,
-	        $user->id, 
-		$this->getParam("social_type"), 
-		$this->getParam("social_token"),
-                $this->getParam("social_secret"), 
-		$this->getParam("post"),
-		$this->getParam("fb_username"),
-		$this->getParam("tw_username")
-            );
-	    $socialAccount->save();       
- 	}
-
-        return array("meta" => array("status" => "true"));
+        
+        return $this->toArray();
     }
 
     /**

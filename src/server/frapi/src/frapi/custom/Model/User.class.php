@@ -6,6 +6,8 @@ class User extends OhenroBase {
     public $created_at;
     public $updated_at;
     public $social = array();
+    public $fb_username;
+    public $tw_username;
 
     function __construct($name, $token = null){
         $this->name = $name;
