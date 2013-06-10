@@ -81,6 +81,7 @@ class Action_Register_user extends Frapi_Action implements Frapi_Action_Interfac
 			$param["social_secret"]
         );
 
+	//var_dump($socialAccount);
         try{
             if(!$socialAccount) {
                 // 新規登録の場合
@@ -92,23 +93,40 @@ class Action_Register_user extends Frapi_Action implements Frapi_Action_Interfac
 
                 // SocialAccount の登録
                 $share = 1;     // 共有設定は 1 (ON) がデフォルト
-                $socialAccount = new SocialAccount(
+
+		if(isset($param["fb_username"])){
+		    $fb_username = $param["fb_username"];
+		}else{
+		    $fb_username = null;
+		}
+
+		if(isset($param["tw_username"])){
+		    $tw_username = $param["tw_username"];
+		}else{
+		    $tw_username = null;
+		}
+
+
+		$socialAccount = new SocialAccount(
                     null,
 		    $user->id, 
 		    $param["social_type"],
 		    $param["social_token"], 
 		    $param["social_secret"], 
 		    $share,
-		    $param["fb_username"],
-		    $param["tw_username"]
+		    $fb_username,
+		    $tw_username
 		);
                 $socialAccount->save();
             }
+	    //var_dump($socialAccount);
 
-            // user_id から User を生成
+	    // user_id から User を生成
             $user = UserFactory::generateByUserId($socialAccount->user_id);
 
-            // name が変わっていたら変更する - 2回目以降の登録のとき
+             //var_dump($param);
+	    // var_dump($param);
+	    // name が変わっていたら変更する - 2回目以降の登録のとき
             if($param['name'] != $user->name){
                 $user->name = $param['name'];
                 $user->save();

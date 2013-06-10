@@ -272,7 +272,6 @@ HEAD: Retrieve the meta information relative to a sibling.&#13;
    <name>Spot_getcomment</name>
    <enabled>1</enabled>
    <public>1</public>
-   <description></description>
    <route>api/spot/get_comment</route>
    <hash>b5c5604a5bdf8d2549351e31d64d809efa3c47e9</hash>
    <parameters>
@@ -281,6 +280,15 @@ HEAD: Retrieve the meta information relative to a sibling.&#13;
      <required>1</required>
     </parameter>
    </parameters>
+  </action>
+  <action>
+   <name>Check_version</name>
+   <enabled>1</enabled>
+   <public>1</public>
+   <description></description>
+   <route>/api/version/check</route>
+   <parameters></parameters>
+   <hash>7317da477a95f6c7aab81d80dff0d09e2bd0ffb0</hash>
   </action>
  </actions>
 </frapi-config>
