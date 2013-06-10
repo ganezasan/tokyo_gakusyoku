@@ -1,0 +1,9 @@
+<Alloy>
+	<TableViewSection id="section">
+		<HeaderView>
+			<View id="sectionHeader">
+	    		<Label id="sectionTitle"/>
+			</View>
+		</HeaderView>
+	</TableViewSection>
+</Alloy>

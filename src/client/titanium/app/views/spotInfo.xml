@@ -1,0 +1,8 @@
+<Alloy>
+    <Window class="container">
+        <ScrollView id="scrollView">
+        	<TableView id="tableView" rowBackgroundColor="white" backgroundColor='transparent'/>
+            <Button id="checkinButton" title="Checkinする" onClick="checkinSpot" />
+        </ScrollView>
+    </Window>
+</Alloy>
