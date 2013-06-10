@@ -48,8 +48,6 @@ require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'SpotManager.class.php');
 require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'Checkin.class.php');
 require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'CheckinManager.class.php');
 require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'ShareQueue.class.php');
-require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'SpotImages.class.php');
-require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'SpotImagesManager.class.php');
 require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'GoSpot.class.php');
 require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'GoSpotManager.class.php');
 require_once(CUSTOM_MODEL . DIRECTORY_SEPARATOR . 'Photo.class.php');

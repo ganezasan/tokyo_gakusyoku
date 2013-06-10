@@ -12,7 +12,7 @@ class PhotoManager extends OhenroBase {
         $select = $db->select()
                 ->from(array('p' => 'Photos'))
                 ->join(
-                        array('c' => 'checkins'),
+                        array('c' => 'Checkins'),
                         'p.checkin_id = c.id',
                         array(
                                 'comment' => 'comment',

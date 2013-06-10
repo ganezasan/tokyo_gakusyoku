@@ -2,7 +2,7 @@
 class GoSpotManager extends OhenroBase {
     public static function insertGoSpot($user_id, $spot_id){
 	
-        $goSpotTable = new Zend_Db_Table('gospots');
+        $goSpotTable = new Zend_Db_Table('GoSpots');
         
 	$goSpotInnsertId = $goSpotTable->insert(
             array(
@@ -17,7 +17,7 @@ class GoSpotManager extends OhenroBase {
     public static function getGoSpotCount($user_id,$spot_id){
         $db = Zend_Db_Table::getDefaultAdapter();
         $select = $db->select()
-                ->from('gospots','COUNT(*)')
+                ->from('GoSpots','COUNT(*)')
                 ->where('user_id = ?',$user_id)
       		->where('spot_id = ?',$spot_id);
 	  return $db->fetchOne($select);
