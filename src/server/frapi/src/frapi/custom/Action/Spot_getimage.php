@@ -88,8 +88,8 @@ class Action_Spot_getimage extends Frapi_Action implements Frapi_Action_Interfac
 		"id"    => $image["id"],
                 "spot_id"  => $image["spot_id"],
                 "user_id"  => $image["user_id"],
-                "file_name" => $image["daizu_image_small"],
-                "thumbnails" => $image["daizu_image_large"],
+                "file_name" => $image["daizu_image_large"],
+                "thumbnails" => $image["daizu_image_small"],
                 "comment" => $image["comment"],
 		"created_at" => $image["created_at"],
             );
