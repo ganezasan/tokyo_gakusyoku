@@ -33,6 +33,7 @@ $autoloader = Zend_Loader_Autoloader::getInstance();
 //});
 
 $config = new Zend_Config_Ini(CUSTOM_PATH . '/Config/config.ini');
+define('IMG_ENDPOINT_URL', $config->img->endpoint_url);
 $dbAdapter = Zend_Db::factory($config->db);
 Zend_Db_Table::setDefaultAdapter($dbAdapter);
 
