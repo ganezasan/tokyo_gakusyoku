@@ -40,31 +40,15 @@ if( isUserLogined() &&
                $.args.spotPosition.latitude   , $.args.spotPosition.longitude)
     ){
     // チェックイン許可
-    // $.comment.touchEnabled = true;
-    // $.comment.value = $.args.comment || '';
-    // $.comment.opacity = 1;
     $.checkinButton.touchEnabled = true;
     $.checkin.opacity = 1;
 }else{
     // チェックイン拒否
-
-    // ログイン状態に応じてコメントを変更
-    if(isUserLogined()){
-        if($.args.checkin){
-            // すでにチェックインしていたときはコメントを入力
-            // $.comment.value = $.args.comment;
-        }else{
-   //         $.comment.value = "スポットに近づくとチェックインすることができます";
-        }
-    }else{
-     //   $.comment.value = "チェックインをするにはログインする必要があります";
+    if(!isUserLogined()){
         alert('チェックインするにはユーザ登録が必要です');
     }
-
-	//あとで戻す
-    // $.checkinButton.touchEnabled = false;
-    // $.checkinButton.touchEnabled = false;
-    // $.checkinButton.opacity = 0.70;
+    $.checkinButton.touchEnabled = false;
+    $.checkinButton.opacity = 0.70;
 }
 
 /**
@@ -136,6 +120,8 @@ var checkinSpot = function checkinSpot(){
 			$.checkin.opacity = 1.0;
 
             //失敗時
+			alert(this);
+			alert(e);
             Ti.API.info("Received text: " + this.responseText);
             alert('チェックインに失敗しました : ' + e.data);
         },

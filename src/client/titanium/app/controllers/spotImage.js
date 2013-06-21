@@ -2,8 +2,6 @@ Ti.include('picturegallery.js');
 // APIMapper の準備
 var ApiMapper = require("apiMapper").ApiMapper;
 var images = [];
-var imageUrl = "http://gakusyoku.nas.iginga.com/images/";
-var thumbUrl = "http://gakusyoku.nas.iginga.com/thumbnails/";
 
 var args = arguments[0] || {};
 $.args =  args;
@@ -34,8 +32,8 @@ loadSpotImages = function(spotId){
     		    var item = new Object();
   				//イメージセット
 				item = {
-				  path:imageUrl+json.spotImages[i].file_name,
-				  thumbPath:thumbUrl+json.spotImages[i].thumbnails,
+				  path:Alloy.Globals.app.imageUrl+json.spotImages[i].file_name,
+				  thumbPath:Alloy.Globals.app.imageUrl+json.spotImages[i].thumbnails,
 				  caption: json.spotImages[i].comment
 				};
 				images.push(item);
