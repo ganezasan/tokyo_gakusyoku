@@ -75,6 +75,7 @@ ApiMapper.prototype.accessApi = function(method, uri, param, callback_success, c
 		}
 
 		var xhr = Titanium.Network.createHTTPClient();
+		xhr.timeout = 20000;
 		xhr.onload = callback_success;
 		xhr.onerror = callback_failure;
 		xhr.onsendstream = callback_status;
