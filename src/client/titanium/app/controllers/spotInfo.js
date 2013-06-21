@@ -39,7 +39,6 @@ if( isUserLogined() &&
     if(!isUserLogined()){
         alert('チェックインするにはユーザ登録が必要です');
     }
-
     $.checkinButton.touchEnabled = false;
     $.checkinButton.opacity = 0.70;
 }
