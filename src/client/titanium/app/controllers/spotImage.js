@@ -2,9 +2,6 @@ Ti.include('picturegallery.js');
 // APIMapper の準備
 var ApiMapper = require("apiMapper").ApiMapper;
 var images = [];
-//var imageUrl = "http://gakusyoku.nas.iginga.com/images/";
-//var thumbUrl = "http://gakusyoku.nas.iginga.com/thumbnails/";
-//var imageUrl = "http://img.iwatefoods.cheekit.com:8080";
 
 var args = arguments[0] || {};
 $.args =  args;

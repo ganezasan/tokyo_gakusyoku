@@ -2,7 +2,6 @@
 var ApiMapper = require("apiMapper").ApiMapper;
 var apiMapper = new ApiMapper();
 var createIndicator = require("createIndicator");
-var imageUrl = "http://gakusyoku.nas.iginga.com/images/spotImages/";
 var Common = require("common").Common;
 var common = new Common();
 
@@ -199,7 +198,6 @@ function tableDataSet(spotId) {
 		            right:tableData[i].right, 
 		        };
 		        if(Number(i) == 0){
-		        	// args.picture = imageUrl + $.args.picture;
 					args.picture = $.args.picture;
 					args.reference = $.args.reference;
 		        	args.spot_id = $.args.spot_id;
